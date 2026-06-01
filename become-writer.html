@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Become a Writer – Publish & Earn on StoryVerse</title>
+    <meta name="description" content="Join thousands of writers on StoryVerse. Publish your stories for free, build an audience, and earn money with our freemium paywall model. No upfront costs.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* =============================================
+           BECOME A WRITER PAGE – LOCAL STYLES
+           Follows StoryVerse light design system
+        ============================================= */
+
+        /* ── Keyframes ── */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes floatY {
+            0%, 100% { transform: translateY(0); }
+            50%       { transform: translateY(-10px); }
+        }
+        @keyframes pulse-ring {
+            0%   { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(98,171,0,0.35); }
+            70%  { transform: scale(1);    box-shadow: 0 0 0 14px rgba(98,171,0,0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0   rgba(98,171,0,0); }
+        }
+        @keyframes shimmer {
+            0%   { background-position: -600px 0; }
+            100% { background-position: 600px 0; }
+        }
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Page-level reset ── */
+        *, *::before, *::after { box-sizing: border-box; }
+
+        /* =============================================
+           SECTION 1 – HERO
+        ============================================= */
+        .bw-hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        /* Decorative background shapes */
+        .bw-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 80% 20%, rgba(236,205,0,.10) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 10% 80%, rgba(98,171,0,.08) 0%, transparent 65%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bw-hero-inner {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            padding: 120px 0 80px;
+        }
+
+        .bw-hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        /* Left: copy */
+        .bw-hero-copy { animation: fadeInUp .7s ease both; }
+
+        .bw-hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 18px;
+            border: 1.5px solid var(--color-primary);
+            border-radius: 100px;
+            background: rgba(236,205,0,.08);
+            font-size: 13px;
+            font-weight: 700;
+            color: #6b5900;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+        .bw-hero-eyebrow i { color: var(--color-primary); font-size: 14px; }
+
+        .bw-hero-h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(36px, 5vw, 58px);
+            font-weight: 700;
+            line-height: 1.15;
+            color: var(--color-text);
+            margin-bottom: 22px;
+        }
+        .bw-hero-h1 .accent {
+            color: var(--color-success);
+            position: relative;
+            display: inline-block;
+        }
+        .bw-hero-h1 .accent::after {
+            content: '';
+            position: absolute;
+            left: 0; bottom: -4px;
+            width: 100%; height: 4px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, var(--color-success), var(--color-primary));
+        }
+
+        .bw-hero-desc {
+            font-size: 17px;
+            line-height: 1.8;
+            color: var(--color-text-secondary);
+            margin-bottom: 36px;
+            max-width: 520px;
+        }
+
+        .bw-hero-cta {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .btn-bw-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 36px;
+            border: none;
+            border-radius: 4px;
+            background: var(--color-success);
+            color: #fff;
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all .3s ease;
+            animation: pulse-ring 2.4s ease infinite;
+        }
+        .btn-bw-primary:hover {
+            background: #4d8800;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 28px rgba(98,171,0,.28);
+            animation: none;
+        }
+        .btn-bw-primary i { font-size: 18px; }
+
+        .btn-bw-ghost {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border: 1.5px solid var(--color-border);
+            border-radius: 4px;
+            background: transparent;
+            color: var(--color-text);
+            font-family: var(--font-body);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all .3s ease;
+        }
+        .btn-bw-ghost:hover {
+            border-color: var(--color-success);
+            color: var(--color-success);
+        }
+
+        /* Mini trust-stats row */
+        .bw-hero-trustbar {
+            margin-top: 44px;
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        .bw-trust-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .bw-trust-num {
+            font-family: var(--font-heading);
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--color-text);
+            animation: countUp .6s ease both;
+        }
+        .bw-trust-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            color: var(--color-text-secondary);
+            margin-top: 2px;
+        }
+
+        /* Right: illustration card */
+        .bw-hero-visual {
+            animation: fadeInUp .9s ease .15s both;
+        }
+
+        .bw-mockup-card {
+            background: #fff;
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 20px 60px rgba(0,0,0,.08);
+            animation: floatY 5s ease-in-out infinite;
+        }
+
+        .bw-mockup-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .bw-mockup-avatar {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #62ab00, #eccd00);
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 20px;
+        }
+        .bw-mockup-name { font-weight: 700; font-size: 15px; color: var(--color-text); }
+        .bw-mockup-meta { font-size: 12px; color: var(--color-text-secondary); }
+
+        .bw-mockup-cover {
+            width: 100%;
+            height: 180px;
+            border-radius: 10px;
+            object-fit: cover;
+            margin-bottom: 16px;
+        }
+
+        .bw-mockup-title {
+            font-family: var(--font-heading);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 6px;
+        }
+
+        .bw-mockup-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 14px;
+        }
+
+        .bw-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .bw-chip-green {
+            background: rgba(98,171,0,.1);
+            color: var(--color-success);
+            border: 1px solid rgba(98,171,0,.2);
+        }
+        .bw-chip-gold {
+            background: rgba(236,205,0,.15);
+            color: #6b5900;
+            border: 1px solid rgba(236,205,0,.3);
+        }
+
+        .bw-earnings-badge {
+            background: linear-gradient(135deg, var(--color-success), #4d8800);
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Floating notification */
+        .bw-float-notif {
+            position: absolute;
+            bottom: 30px;
+            left: -30px;
+            background: #fff;
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 10px 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            white-space: nowrap;
+            animation: floatY 4s ease-in-out .5s infinite;
+        }
+        .bw-float-notif i { color: var(--color-success); font-size: 16px; }
+        .bw-float-notif span { font-weight: 700; color: var(--color-text); }
+
+        /* =============================================
+           SECTION 2 – PROBLEM & MISSION
+        ============================================= */
+        .bw-mission {
+            padding: 90px 0;
+            background: #f8f9fa;
+            border-top: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .bw-section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-success);
+            margin-bottom: 12px;
+        }
+        .bw-section-label i { font-size: 12px; }
+
+        .bw-section-h2 {
+            font-family: var(--font-heading);
+            font-size: clamp(28px, 4vw, 40px);
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--color-text);
+            margin-bottom: 18px;
+        }
+
+        .bw-mission-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: start;
+            margin-top: 10px;
+        }
+
+        .bw-mission-copy p {
+            font-size: 16px;
+            line-height: 1.9;
+            color: var(--color-text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .bw-mission-copy .bw-highlight-box {
+            border-left: 4px solid var(--color-success);
+            background: rgba(98,171,0,.06);
+            border-radius: 0 8px 8px 0;
+            padding: 16px 20px;
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--color-text);
+            font-weight: 600;
+            margin-top: 20px;
+        }
+
+        .bw-problem-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .bw-problem-card {
+            background: #fff;
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 20px 22px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            transition: all .3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,.04);
+        }
+        .bw-problem-card:hover {
+            transform: translateX(4px);
+            border-color: var(--color-success);
+            box-shadow: 0 6px 20px rgba(98,171,0,.1);
+        }
+
+        .bw-problem-icon {
+            width: 44px; height: 44px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .icon-red    { background: rgba(189,0,24,.08); color: #bd0018; }
+        .icon-yellow { background: rgba(236,205,0,.15); color: #8a7200; }
+        .icon-green  { background: rgba(98,171,0,.1); color: var(--color-success); }
+
+        .bw-problem-text strong {
+            display: block;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 4px;
+        }
+        .bw-problem-text p {
+            font-size: 13.5px;
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* =============================================
+           SECTION 3 – HOW IT WORKS (PUBLISHING)
+        ============================================= */
+        .bw-how-publish {
+            padding: 90px 0;
+            background: #fff;
+        }
+
+        .bw-section-center { text-align: center; margin-bottom: 60px; }
+        .bw-section-center .bw-section-h2 { margin-bottom: 14px; }
+        .bw-section-center p {
+            font-size: 16px;
+            color: var(--color-text-secondary);
+            max-width: 580px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .bw-publish-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+            position: relative;
+        }
+
+        /* Connector line between steps */
+        .bw-publish-steps::before {
+            content: '';
+            position: absolute;
+            top: 52px;
+            left: calc(16.67% + 26px);
+            width: calc(66.67% - 52px);
+            height: 2px;
+            background: linear-gradient(90deg, var(--color-success), var(--color-primary));
+            z-index: 0;
+        }
+
+        .bw-step-card {
+            text-align: center;
+            padding: 0 30px;
+            position: relative;
+            z-index: 1;
+            transition: transform .3s ease;
+        }
+        .bw-step-card:hover { transform: translateY(-6px); }
+
+        .bw-step-number-wrap {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            background: #fff;
+            border: 3px solid var(--color-border);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 28px;
+            position: relative;
+            transition: all .3s ease;
+        }
+        .bw-step-card:hover .bw-step-number-wrap {
+            border-color: var(--color-success);
+            box-shadow: 0 0 0 8px rgba(98,171,0,.08);
+        }
+
+        .bw-step-number-wrap .step-num {
+            position: absolute;
+            top: -6px; right: -6px;
+            width: 24px; height: 24px;
+            border-radius: 50%;
+            background: var(--color-success);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            border: 2px solid #fff;
+        }
+
+        .bw-step-number-wrap i {
+            font-size: 28px;
+            color: var(--color-text-secondary);
+            transition: color .3s ease;
+        }
+        .bw-step-card:hover .bw-step-number-wrap i { color: var(--color-success); }
+
+        .bw-step-card h3 {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 10px;
+        }
+        .bw-step-card p {
+            font-size: 14.5px;
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+        }
+
+        .bw-step-card .bw-step-tag {
+            margin-top: 14px;
+        }
+
+        /* Detail strip below steps */
+        .bw-publish-detail {
+            margin-top: 60px;
+            background: linear-gradient(135deg, rgba(98,171,0,.04) 0%, rgba(236,205,0,.06) 100%);
+            border: 1px solid rgba(98,171,0,.15);
+            border-radius: 16px;
+            padding: 36px 40px;
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .bw-publish-detail-icon {
+            width: 64px; height: 64px;
+            border-radius: 14px;
+            background: var(--color-success);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 26px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .bw-publish-detail-copy { flex: 1; min-width: 220px; }
+        .bw-publish-detail-copy h4 {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+        .bw-publish-detail-copy p {
+            font-size: 14.5px;
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+        }
+
+        .bw-feature-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 200px;
+        }
+        .bw-feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-text);
+            list-style: none;
+        }
+        .bw-feature-list li i { color: var(--color-success); font-size: 13px; }
+
+        /* =============================================
+           SECTION 4 – HOW YOU EARN (PAYWALL MODEL)
+        ============================================= */
+        .bw-earn {
+            padding: 90px 0;
+            background: #f8f9fa;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .bw-earn-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin-top: 16px;
+        }
+
+        /* Paywall visual diagram */
+        .bw-paywall-diagram {
+            position: relative;
+        }
+
+        .bw-paywall-track {
+            border: 1.5px solid var(--color-border);
+            border-radius: 16px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 8px 32px rgba(0,0,0,.06);
+        }
+
+        .bw-paywall-row {
+            display: flex;
+            align-items: center;
+            padding: 16px 22px;
+            gap: 14px;
+            border-bottom: 1px solid var(--color-border);
+            transition: background .2s ease;
+        }
+        .bw-paywall-row:last-child { border-bottom: none; }
+        .bw-paywall-row:hover { background: #f8f9fa; }
+
+        .bw-chap-num {
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 700;
+            flex-shrink: 0;
+        }
+        .chap-free { background: rgba(98,171,0,.1); color: var(--color-success); }
+        .chap-paid { background: rgba(236,205,0,.15); color: #6b5900; }
+
+        .bw-chap-info { flex: 1; }
+        .bw-chap-info .chap-title {
+            font-size: 14px; font-weight: 700; color: var(--color-text);
+        }
+        .bw-chap-info .chap-sub {
+            font-size: 12px; color: var(--color-text-secondary);
+        }
+
+        .bw-chap-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 11px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .badge-free { background: rgba(98,171,0,.1); color: var(--color-success); }
+        .badge-locked { background: rgba(236,205,0,.12); color: #6b5900; }
+        .badge-locked i { font-size: 11px; }
+
+        /* Revenue flow arrow card */
+        .bw-revenue-flow {
+            background: #fff;
+            border: 1px solid var(--color-border);
+            border-radius: 14px;
+            padding: 22px 24px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,.04);
+        }
+        .bw-revenue-flow .flow-icon {
+            width: 48px; height: 48px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #62ab00, #4d8800);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; color: #fff;
+        }
+        .bw-revenue-flow .flow-text { flex: 1; }
+        .bw-revenue-flow .flow-text strong {
+            display: block; font-size: 15px; font-weight: 700; color: var(--color-text);
+        }
+        .bw-revenue-flow .flow-text span {
+            font-size: 13px; color: var(--color-text-secondary);
+        }
+        .bw-revenue-flow .flow-pct {
+            font-family: var(--font-heading);
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--color-success);
+        }
+
+        /* Earn explanation copy */
+        .bw-earn-copy .bw-earn-points {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        .bw-earn-point {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+        .bw-earn-point-icon {
+            width: 48px; height: 48px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .ep-yellow { background: rgba(236,205,0,.15); color: #8a7200; }
+        .ep-green  { background: rgba(98,171,0,.1);   color: var(--color-success); }
+        .ep-red    { background: rgba(189,0,24,.08);  color: #bd0018; }
+        .ep-blue   { background: rgba(59,130,246,.08); color: #2563eb; }
+
+        .bw-earn-point-body h4 {
+            font-family: var(--font-heading);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 5px;
+        }
+        .bw-earn-point-body p {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+        }
+
+        /* =============================================
+           SECTION 5 – FINAL CTA STRIP
+        ============================================= */
+        .bw-final-cta {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #1a2600 0%, #2b4000 50%, #1a2600 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bw-final-cta::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 50% 60% at 50% 0%, rgba(236,205,0,.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .bw-final-cta .cta-eyebrow {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-primary);
+            display: block;
+            margin-bottom: 16px;
+        }
+
+        .bw-final-cta h2 {
+            font-family: var(--font-heading);
+            font-size: clamp(28px, 4vw, 46px);
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .bw-final-cta p {
+            font-size: 16px;
+            color: rgba(255,255,255,.65);
+            max-width: 500px;
+            margin: 0 auto 38px;
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
+        }
+
+        .bw-final-cta .btn-bw-primary {
+            font-size: 17px;
+            padding: 18px 48px;
+            box-shadow: 0 10px 32px rgba(98,171,0,.35);
+        }
+
+        .bw-final-note {
+            margin-top: 20px;
+            font-size: 13px;
+            color: rgba(255,255,255,.45);
+            position: relative;
+            z-index: 1;
+        }
+        .bw-final-note i { margin-right: 5px; }
+
+        /* =============================================
+           RESPONSIVE
+        ============================================= */
+        @media (max-width: 900px) {
+            .bw-hero-grid,
+            .bw-mission-grid,
+            .bw-earn-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .bw-hero-visual { display: none; }
+            .bw-publish-steps {
+                grid-template-columns: 1fr;
+            }
+            .bw-publish-steps::before { display: none; }
+            .bw-publish-detail { flex-direction: column; gap: 24px; }
+        }
+
+        @media (max-width: 600px) {
+            .bw-hero-trustbar { gap: 24px; }
+            .bw-hero-cta { flex-direction: column; align-items: flex-start; }
+            .btn-bw-primary, .btn-bw-ghost { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ── Navigation (matches site) ── -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-book-open"></i>
+                <span>StoryVerse</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html"    class="nav-link">Home</a>
+                <a href="discover.html" class="nav-link">Discover</a>
+                <a href="trending.html" class="nav-link">Trending</a>
+                <a href="become-writer.html" class="nav-link active">Become a Writer</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-secondary" id="loginBtn">Login</button>
+                <button class="btn-primary"   id="signupBtn">Sign Up</button>
+                <div class="user-menu" id="userMenu" style="display:none;">
+                    <img src="https://ui-avatars.com/api/?name=User&background=eccd00&color=282828"
+                         alt="User" class="user-avatar" id="userAvatar">
+                    <div class="dropdown-menu" id="dropdownMenu">
+                        <a href="profile.html"><i class="fas fa-user"></i> My Profile</a>
+                        <a href="library.html"><i class="fas fa-book"></i> My Library</a>
+                        <a href="wallet.html"><i class="fas fa-wallet"></i> Wallet</a>
+                        <a href="creator-studio.html" id="creatorStudioLink" style="display:none;">
+                            <i class="fas fa-pen"></i> Creator Studio
+                        </a>
+                        <hr>
+                        <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SECTION 1 – HERO
+    ═══════════════════════════════════════════════════════════ -->
+    <section class="bw-hero" id="hero">
+        <div class="container">
+            <div class="bw-hero-inner">
+                <div class="bw-hero-grid">
+
+                    <!-- Left copy -->
+                    <div class="bw-hero-copy">
+                        <div class="bw-hero-eyebrow">
+                            <i class="fas fa-feather-alt"></i>
+                            Yes, this is your moment
+                        </div>
+
+                        <h1 class="bw-hero-h1">
+                            Your Stories Deserve<br>
+                            to Be <span class="accent">Read &amp; Rewarded</span>
+                        </h1>
+
+                        <p class="bw-hero-desc">
+                            You've been writing for years — now it's time to share those stories with
+                            the world and <strong>earn real money</strong> doing it. StoryVerse gives
+                            you a free platform, a global audience, and a proven paywall model.
+                        </p>
+
+                        <div class="bw-hero-cta">
+                            <button class="btn-bw-primary" id="startPublishingBtn">
+                                <i class="fas fa-rocket"></i>
+                                Start Publishing — It's Free
+                            </button>
+                            <a href="#how-it-works" class="btn-bw-ghost">
+                                <i class="fas fa-play-circle"></i>
+                                See How It Works
+                            </a>
+                        </div>
+
+                        <div class="bw-hero-trustbar">
+                            <div class="bw-trust-item">
+                                <span class="bw-trust-num">50K+</span>
+                                <span class="bw-trust-label">Active Writers</span>
+                            </div>
+                            <div class="bw-trust-item">
+                                <span class="bw-trust-num">$5M+</span>
+                                <span class="bw-trust-label">Paid to Writers</span>
+                            </div>
+                            <div class="bw-trust-item">
+                                <span class="bw-trust-num">100%</span>
+                                <span class="bw-trust-label">Free to Join</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right visual mockup -->
+                    <div class="bw-hero-visual" style="position:relative;">
+                        <div class="bw-mockup-card">
+                            <div class="bw-mockup-header">
+                                <div class="bw-mockup-avatar">
+                                    <i class="fas fa-user-pen"></i>
+                                </div>
+                                <div>
+                                    <div class="bw-mockup-name">Your Writer Dashboard</div>
+                                    <div class="bw-mockup-meta">Creator Studio &bull; Active</div>
+                                </div>
+                                <div style="margin-left:auto;">
+                                    <span class="bw-chip bw-chip-green">
+                                        <i class="fas fa-circle" style="font-size:8px;"></i> Live
+                                    </span>
+                                </div>
+                            </div>
+
+                            <img
+                                src="https://images.unsplash.com/photo-1455390582262-044cdead277a?w=600&h=200&fit=crop&q=80"
+                                alt="Writing desk"
+                                class="bw-mockup-cover"
+                            >
+
+                            <div class="bw-mockup-title">The Ember Chronicles</div>
+                            <div style="font-size:13px;color:var(--color-text-secondary);">Fantasy &bull; 24 chapters &bull; 4.9 ★</div>
+
+                            <div class="bw-mockup-row">
+                                <span class="bw-chip bw-chip-green">
+                                    <i class="fas fa-eye"></i> 12.5K views
+                                </span>
+                                <span class="bw-chip bw-chip-gold">
+                                    <i class="fas fa-users"></i> 1.2K readers
+                                </span>
+                                <div class="bw-earnings-badge">
+                                    <i class="fas fa-coins"></i> ৳4,850 earned
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Floating notification pill -->
+                        <div class="bw-float-notif">
+                            <i class="fas fa-unlock"></i>
+                            <span>Chapter 8 unlocked by 47 readers today!</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SECTION 2 – PROBLEM & OUR MISSION
+    ═══════════════════════════════════════════════════════════ -->
+    <section class="bw-mission" id="mission">
+        <div class="container">
+
+            <div class="bw-mission-grid">
+
+                <!-- Left: copy -->
+                <div class="bw-mission-copy">
+                    <div class="bw-section-label">
+                        <i class="fas fa-heart"></i> We Understand Your Struggle
+                    </div>
+                    <h2 class="bw-section-h2">Traditional Publishing Is Broken for New Writers</h2>
+
+                    <p>You pour your heart into your writing — late nights, weekends sacrificed — only
+                       to be met with rejection letters, gatekeepers, and impossible upfront costs.
+                       Getting published used to require either a literary agent, a publisher's approval,
+                       or <em>thousands of dollars</em> in self-publishing fees.</p>
+
+                    <p>Most great stories never reach readers because talented writers simply can't
+                       afford the barrier to entry. That's a tragedy — for writers <em>and</em> for readers
+                       hungry for fresh voices.</p>
+
+                    <div class="bw-highlight-box">
+                        💡 StoryVerse was built specifically to solve this. We give you a completely
+                        <strong>free publishing platform</strong> so your only job is to write.
+                        We handle the rest — audience, payments, and distribution.
+                    </div>
+                </div>
+
+                <!-- Right: problem cards -->
+                <div class="bw-problem-cards">
+                    <div class="bw-problem-card">
+                        <div class="bw-problem-icon icon-red">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="bw-problem-text">
+                            <strong>No More Gatekeepers</strong>
+                            <p>Forget waiting months for literary agents or publishers to reply. On StoryVerse, you publish directly to your audience — no approval needed.</p>
+                        </div>
+                    </div>
+
+                    <div class="bw-problem-card">
+                        <div class="bw-problem-icon icon-yellow">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="bw-problem-text">
+                            <strong>Zero Upfront Costs, Ever</strong>
+                            <p>Traditional self-publishing can cost ৳50,000–৳200,000. StoryVerse is 100% free to join and publish. You only earn — never pay.</p>
+                        </div>
+                    </div>
+
+                    <div class="bw-problem-card">
+                        <div class="bw-problem-icon icon-green">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div class="bw-problem-text">
+                            <strong>Instant Global Reach</strong>
+                            <p>Your story goes live immediately to our 2M+ reader base. No marketing budget needed — our discovery algorithms promote quality stories.</p>
+                        </div>
+                    </div>
+
+                    <div class="bw-problem-card">
+                        <div class="bw-problem-icon icon-green">
+                            <i class="fas fa-hand-holding-usd"></i>
+                        </div>
+                        <div class="bw-problem-text">
+                            <strong>You Keep 70% of Every Taka</strong>
+                            <p>Every coin a reader spends unlocking your chapters puts money directly in your wallet — no middlemen, no hidden deductions.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SECTION 3 – HOW IT WORKS (PUBLISHING)
+    ═══════════════════════════════════════════════════════════ -->
+    <section class="bw-how-publish" id="how-it-works">
+        <div class="container">
+
+            <div class="bw-section-center">
+                <div class="bw-section-label" style="justify-content:center;">
+                    <i class="fas fa-upload"></i> Publishing Guide
+                </div>
+                <h2 class="bw-section-h2">Publish Your First Story in 3 Simple Steps</h2>
+                <p>Our Creator Studio is designed for writers, not tech experts. If you can type, you can publish.</p>
+            </div>
+
+            <div class="bw-publish-steps">
+
+                <!-- Step 1 -->
+                <div class="bw-step-card">
+                    <div class="bw-step-number-wrap">
+                        <i class="fas fa-user-plus"></i>
+                        <span class="step-num">1</span>
+                    </div>
+                    <h3>Create Your Account</h3>
+                    <p>Sign up for free using your email in under 60 seconds. Then head to your profile and click <strong>"Become a Writer"</strong> — your Creator Studio unlocks instantly.</p>
+                    <div class="bw-step-tag">
+                        <span class="bw-chip bw-chip-green">
+                            <i class="fas fa-check"></i> No credit card
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="bw-step-card">
+                    <div class="bw-step-number-wrap">
+                        <i class="fas fa-book-open"></i>
+                        <span class="step-num">2</span>
+                    </div>
+                    <h3>Create &amp; Upload Chapters</h3>
+                    <p>Inside Creator Studio, create a new book, write your synopsis, pick your genre, and upload chapters as <strong>PDFs or image panels</strong> (perfect for webtoons). Publish in one click.</p>
+                    <div class="bw-step-tag">
+                        <span class="bw-chip bw-chip-gold">
+                            <i class="fas fa-file-pdf"></i> PDF &amp; Image support
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="bw-step-card">
+                    <div class="bw-step-number-wrap">
+                        <i class="fas fa-sliders-h"></i>
+                        <span class="step-num">3</span>
+                    </div>
+                    <h3>Set Free &amp; Paid Chapters</h3>
+                    <p>For each chapter choose <strong>"Free Access"</strong> to hook readers, or <strong>"Paid — Unlock with Coins"</strong> and set your price. Our freemium model does the selling for you.</p>
+                    <div class="bw-step-tag">
+                        <span class="bw-chip bw-chip-green">
+                            <i class="fas fa-lock-open"></i> You control pricing
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Feature detail strip -->
+            <div class="bw-publish-detail">
+                <div class="bw-publish-detail-icon">
+                    <i class="fas fa-paint-brush"></i>
+                </div>
+                <div class="bw-publish-detail-copy">
+                    <h4>Your Creator Studio — Everything in One Place</h4>
+                    <p>Manage all your books, track chapter performance, monitor reader engagement, and withdraw your earnings — all from one clean, easy-to-use dashboard built for writers.</p>
+                </div>
+                <ul class="bw-feature-list">
+                    <li><i class="fas fa-check-circle"></i> Rich cover &amp; chapter management</li>
+                    <li><i class="fas fa-check-circle"></i> Live view &amp; earnings analytics</li>
+                    <li><i class="fas fa-check-circle"></i> One-click chapter publishing</li>
+                    <li><i class="fas fa-check-circle"></i> Payout to bKash / bank</li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SECTION 4 – HOW YOU EARN (PAYWALL MODEL)
+    ═══════════════════════════════════════════════════════════ -->
+    <section class="bw-earn" id="how-you-earn">
+        <div class="container">
+
+            <div class="bw-section-center">
+                <div class="bw-section-label" style="justify-content:center;">
+                    <i class="fas fa-coins"></i> Monetisation Model
+                </div>
+                <h2 class="bw-section-h2">How the Freemium Paywall Actually Works</h2>
+                <p>It's the same model used by global hits like Webtoon, Tapas, and Royal Road — and it converts casual readers into paying fans.</p>
+            </div>
+
+            <div class="bw-earn-grid">
+
+                <!-- Left: paywall chapter list diagram -->
+                <div class="bw-paywall-diagram">
+                    <div class="bw-paywall-track">
+
+                        <div class="bw-paywall-row">
+                            <div class="bw-chap-num chap-free">Ch.1</div>
+                            <div class="bw-chap-info">
+                                <div class="chap-title">Chapter 1 — The Beginning</div>
+                                <div class="chap-sub">2,400 reads &bull; Hooks the reader</div>
+                            </div>
+                            <span class="bw-chap-badge badge-free">
+                                <i class="fas fa-unlock-alt"></i> Free
+                            </span>
+                        </div>
+
+                        <div class="bw-paywall-row">
+                            <div class="bw-chap-num chap-free">Ch.2</div>
+                            <div class="bw-chap-info">
+                                <div class="chap-title">Chapter 2 — First Conflict</div>
+                                <div class="chap-sub">1,890 reads &bull; Builds tension</div>
+                            </div>
+                            <span class="bw-chap-badge badge-free">
+                                <i class="fas fa-unlock-alt"></i> Free
+                            </span>
+                        </div>
+
+                        <div class="bw-paywall-row">
+                            <div class="bw-chap-num chap-free">Ch.3</div>
+                            <div class="bw-chap-info">
+                                <div class="chap-title">Chapter 3 — The Twist</div>
+                                <div class="chap-sub">1,420 reads &bull; Cliffhanger ending</div>
+                            </div>
+                            <span class="bw-chap-badge badge-free">
+                                <i class="fas fa-unlock-alt"></i> Free
+                            </span>
+                        </div>
+
+                        <!-- Paywall divider -->
+                        <div style="background:linear-gradient(90deg,rgba(236,205,0,.12),rgba(98,171,0,.12));
+                                    border-top:2px dashed rgba(98,171,0,.35);
+                                    border-bottom:2px dashed rgba(98,171,0,.35);
+                                    padding:10px 22px;
+                                    text-align:center;
+                                    font-size:13px;font-weight:700;color:#6b5900;
+                                    display:flex;align-items:center;justify-content:center;gap:8px;">
+                            <i class="fas fa-shield-alt" style="color:var(--color-success);"></i>
+                            PAYWALL — Readers use Coins to unlock below
+                        </div>
+
+                        <div class="bw-paywall-row">
+                            <div class="bw-chap-num chap-paid">Ch.4</div>
+                            <div class="bw-chap-info">
+                                <div class="chap-title">Chapter 4 — The Alliance</div>
+                                <div class="chap-sub">980 unlocks &bull; 10 Coins each</div>
+                            </div>
+                            <span class="bw-chap-badge badge-locked">
+                                <i class="fas fa-lock"></i> 10 Coins
+                            </span>
+                        </div>
+
+                        <div class="bw-paywall-row">
+                            <div class="bw-chap-num chap-paid">Ch.5</div>
+                            <div class="bw-chap-info">
+                                <div class="chap-title">Chapter 5 — Dark Revelation</div>
+                                <div class="chap-sub">820 unlocks &bull; 10 Coins each</div>
+                            </div>
+                            <span class="bw-chap-badge badge-locked">
+                                <i class="fas fa-lock"></i> 10 Coins
+                            </span>
+                        </div>
+
+                        <div class="bw-paywall-row">
+                            <div class="bw-chap-num chap-paid">Ch.6</div>
+                            <div class="bw-chap-info">
+                                <div class="chap-title">Chapter 6 — Final Showdown</div>
+                                <div class="chap-sub">710 unlocks &bull; 15 Coins each</div>
+                            </div>
+                            <span class="bw-chap-badge badge-locked">
+                                <i class="fas fa-lock"></i> 15 Coins
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Revenue flow card -->
+                    <div class="bw-revenue-flow">
+                        <div class="flow-icon"><i class="fas fa-hand-holding-usd"></i></div>
+                        <div class="flow-text">
+                            <strong>Your share of every unlock</strong>
+                            <span>Directly to your StoryVerse wallet — withdraw anytime</span>
+                        </div>
+                        <div class="flow-pct">70%</div>
+                    </div>
+                </div>
+
+                <!-- Right: explanation points -->
+                <div class="bw-earn-copy">
+
+                    <div class="bw-section-label">
+                        <i class="fas fa-lightbulb"></i> The Strategy Behind It
+                    </div>
+                    <h2 class="bw-section-h2" style="font-size:clamp(24px,3vw,34px);">
+                        Give a Little, Earn a Lot
+                    </h2>
+
+                    <div class="bw-earn-points">
+
+                        <div class="bw-earn-point">
+                            <div class="bw-earn-point-icon ep-yellow">
+                                <i class="fas fa-gift"></i>
+                            </div>
+                            <div class="bw-earn-point-body">
+                                <h4>Free Chapters Build Your Audience</h4>
+                                <p>Offer your first 3–5 chapters at no cost. This lets readers sample your writing without risk, building loyal fans who <em>want</em> more — and are willing to pay for it.</p>
+                            </div>
+                        </div>
+
+                        <div class="bw-earn-point">
+                            <div class="bw-earn-point-icon ep-green">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <div class="bw-earn-point-body">
+                                <h4>Paid Chapters Convert Fans to Buyers</h4>
+                                <p>Once hooked, readers unlock subsequent chapters using <strong>StoryVerse Coins</strong>. You set the price (e.g. 5–20 Coins per chapter). Each unlock = real money in your wallet.</p>
+                            </div>
+                        </div>
+
+                        <div class="bw-earn-point">
+                            <div class="bw-earn-point-icon ep-blue">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="bw-earn-point-body">
+                                <h4>Earnings Grow as Your Story Grows</h4>
+                                <p>More chapters = more locked content = more recurring revenue. A 30-chapter story with 1,000 loyal readers can generate ৳50,000+ per month in steady income.</p>
+                            </div>
+                        </div>
+
+                        <div class="bw-earn-point">
+                            <div class="bw-earn-point-icon ep-red">
+                                <i class="fas fa-taka-sign"></i>
+                            </div>
+                            <div class="bw-earn-point-body">
+                                <h4>Withdraw When You're Ready</h4>
+                                <p>Hit the minimum payout threshold and transfer your earnings directly to bKash, Nagad, or your bank. Fast, hassle-free, and transparent.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SECTION 5 – FINAL CTA STRIP
+    ═══════════════════════════════════════════════════════════ -->
+    <section class="bw-final-cta" id="get-started">
+        <div class="container" style="position:relative;z-index:1;">
+            <span class="cta-eyebrow"><i class="fas fa-feather-alt"></i> &nbsp;Ready to Write Your Future?</span>
+            <h2>Join 50,000 Writers Already Earning on StoryVerse</h2>
+            <p>Your stories are waiting. Your audience is waiting. The only thing missing is you.</p>
+            <button class="btn-bw-primary" id="finalStartBtn">
+                <i class="fas fa-rocket"></i>
+                Yes, I Want to Become a Writer
+            </button>
+            <p class="bw-final-note">
+                <i class="fas fa-shield-alt"></i>
+                100% free. No credit card. No hidden fees. Cancel anytime.
+            </p>
+        </div>
+    </section>
+
+    <!-- ── Footer (matches site) ── -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>StoryVerse</h4>
+                    <p>Empowering writers to share their stories and earn from their passion.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>For Writers</h4>
+                    <ul>
+                        <li><a href="become-writer.html">Become a Writer</a></li>
+                        <li><a href="creator-studio.html">Creator Studio</a></li>
+                        <li><a href="#">Monetization Guide</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>For Readers</h4>
+                    <ul>
+                        <li><a href="discover.html">Discover Stories</a></li>
+                        <li><a href="wallet.html">Buy Coins</a></li>
+                        <li><a href="library.html">My Library</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Help Center</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 StoryVerse. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="authContainer"></div>
+        </div>
+    </div>
+
+    <!-- ── Scripts ── -->
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // ── CTA Button handler (both hero + final) ──
+        function handleWriterCTA() {
+            const user = auth.currentUser;
+            if (!user) {
+                // Not logged in → show signup modal with writer intent
+                showSignupForm();
+                // After login/signup, redirect to creator studio
+                sessionStorage.setItem('pendingAction', 'becomeWriter');
+            } else if (user.role === 'writer') {
+                // Already a writer → go straight to studio
+                window.location.href = 'creator-studio.html';
+            } else {
+                // Logged in reader → trigger becomeWriter then redirect
+                auth.becomeWriter();
+            }
+        }
+
+        document.getElementById('startPublishingBtn').addEventListener('click', handleWriterCTA);
+        document.getElementById('finalStartBtn').addEventListener('click', handleWriterCTA);
+
+        // Smooth scroll for ghost button
+        document.querySelector('a[href="#how-it-works"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('how-it-works').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // If user just signed up with writer intent, handle redirect
+        window.addEventListener('load', function() {
+            const pending = sessionStorage.getItem('pendingAction');
+            if (pending === 'becomeWriter' && auth.currentUser) {
+                sessionStorage.removeItem('pendingAction');
+                auth.becomeWriter();
+            }
+        });
+
+        // Scroll-reveal animation for cards
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12 });
+
+        document.querySelectorAll(
+            '.bw-problem-card, .bw-step-card, .bw-earn-point, .bw-paywall-track, .bw-revenue-flow'
+        ).forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(24px)';
+            el.style.transition = 'opacity .55s ease, transform .55s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+
+</html>
