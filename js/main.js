@@ -54,8 +54,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const becomeWriter = document.getElementById('becomeWriter');
     if (becomeWriter) {
         becomeWriter.onclick = function(e) {
-            e.preventDefault();
-            auth.becomeWriter();
+            // Handled by the href="become-writer.html" on the anchor tag;
+            // only intercept if the element is NOT an anchor (old fallback)
+            if (becomeWriter.tagName !== 'A') {
+                e.preventDefault();
+                window.location.href = 'become-writer.html';
+            }
         };
     }
 
@@ -63,11 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const heroStartWriting = document.getElementById('heroStartWriting');
     if (heroStartWriting) {
         heroStartWriting.onclick = function() {
-            if (auth.currentUser) {
-                auth.becomeWriter();
-            } else {
-                showSignupForm();
-            }
+            window.location.href = 'become-writer.html';
         };
     }
 

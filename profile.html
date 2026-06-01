@@ -1,327 +1,550 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile - StoryVerse</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>My Profile – StoryVerse</title>
+    <meta name="description" content="Manage your StoryVerse account — update your profile, change password, and manage payment info.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .profile-container {
-            padding: 3rem 0;
-            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        /* ============================================================
+           PROFILE PAGE – PREMIUM DESIGN
+        ============================================================ */
+
+        :root {
+            --green:  #62ab00;
+            --gold:   #eccd00;
+            --red:    #bd0018;
+            --text:   #333333;
+            --muted:  #999999;
+            --border: #d3d3d3;
+            --bg:     #ffffff;
+            --bg2:    #f8f9fa;
+            --shadow: rgba(0,0,0,.07) 0 4px 20px;
+            --radius: 14px;
+            --trans:  all .25s cubic-bezier(.4,0,.2,1);
         }
 
-        .profile-header {
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 40px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            display: flex;
-            gap: 40px;
-            margin-bottom: 30px;
+        @keyframes fadeInUp {
+            from { opacity:0; transform:translateY(18px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+        @keyframes pulse {
+            0%,100% { box-shadow: 0 0 0 0 rgba(98,171,0,.35); }
+            60%     { box-shadow: 0 0 0 10px rgba(98,171,0,0); }
+        }
+        @keyframes spin { to { transform:rotate(360deg); } }
+
+        *, *::before, *::after { box-sizing:border-box; }
+
+        .profile-page {
+            background: var(--bg2);
+            min-height: calc(100vh - 70px);
+            padding: 40px 0 80px;
         }
 
-        .profile-avatar-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .profile-avatar-large {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            border: 5px solid #62ab00;
-            box-shadow: 0 4px 15px rgba(98, 171, 0, 0.3);
-        }
-
-        .profile-info-section {
-            flex: 1;
-        }
-
-        .profile-info-section h1 {
-            font-size: 36px;
-            margin-bottom: 10px;
-            color: #333;
-            font-family: var(--font-heading);
-        }
-
-        .profile-role-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
-
-        .profile-role-badge.reader {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            color: #ffffff;
-        }
-
-        .profile-role-badge.writer {
-            background: linear-gradient(135deg, #62ab00, #4d8800);
-            color: #ffffff;
-        }
-
-        .profile-role-badge.admin {
-            background: linear-gradient(135deg, #bd0018, #8b0012);
-            color: #ffffff;
-        }
-
-        .profile-meta {
-            color: #666;
-            font-size: 15px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .profile-bio {
-            color: #666;
-            font-size: 15px;
-            line-height: 1.6;
-            margin: 15px 0 20px 0;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border-left: 4px solid #62ab00;
-        }
-
-        .quick-stats-bar {
-            display: flex;
-            gap: 30px;
-            padding: 20px 0;
-            border-top: 2px solid #e0e0e0;
-            border-bottom: 2px solid #e0e0e0;
-            margin-bottom: 20px;
-        }
-
-        .quick-stat {
-            text-align: center;
-        }
-
-        .quick-stat-value {
-            font-size: 28px;
-            font-weight: 700;
-            color: #62ab00;
-            font-family: var(--font-heading);
-        }
-
-        .quick-stat-label {
-            font-size: 13px;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 5px;
-        }
-
-        .profile-actions {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            border-left: 4px solid #62ab00;
-            transition: all 0.3s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 20px rgba(98, 171, 0, 0.15);
-        }
-
-        .stat-card h3 {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .stat-card .stat-value {
-            font-size: 32px;
-            font-weight: 700;
-            color: #333;
-            font-family: var(--font-heading);
-        }
-
-        .stat-card .stat-icon {
-            font-size: 24px;
-            color: #62ab00;
-            margin-bottom: 10px;
-        }
-
-        .info-card {
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            margin-bottom: 20px;
-        }
-
-        .info-card h3 {
-            font-size: 20px;
-            margin-bottom: 20px;
-            color: #333;
-            font-family: var(--font-heading);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .info-row:last-child {
-            border-bottom: none;
-        }
-
-        .info-label {
-            color: #666;
-            font-weight: 600;
-        }
-
-        .info-value {
-            color: #333;
-            font-weight: 700;
-        }
-
-        .activity-feed {
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .activity-item {
-            display: flex;
-            gap: 15px;
-            padding: 15px;
-            border-bottom: 1px solid #f0f0f0;
-            transition: background 0.3s;
-        }
-
-        .activity-item:last-child {
-            border-bottom: none;
-        }
-
-        .activity-item:hover {
-            background: #f8f9fa;
-        }
-
-        .activity-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            flex-shrink: 0;
-        }
-
-        .activity-icon.read { background: #e3f2fd; color: #2196f3; }
-        .activity-icon.write { background: #e8f5e9; color: #4caf50; }
-        .activity-icon.earn { background: #fff3e0; color: #ff9800; }
-
-        .activity-content {
-            flex: 1;
-        }
-
-        .activity-text {
-            color: #333;
-            font-size: 15px;
-            margin-bottom: 5px;
-        }
-
-        .activity-time {
-            color: #999;
-            font-size: 13px;
-        }
-
-        .progress-item {
-            margin-bottom: 20px;
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
-
-        .progress-label {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .progress-value {
-            color: #62ab00;
-            font-weight: 700;
-        }
-
-        .progress-bar {
-            height: 10px;
-            background: #f0f0f0;
-            border-radius: 5px;
+        /* ── Page header ── */
+        .profile-banner {
+            background: linear-gradient(135deg, #1a2600 0%, #2b4000 55%, #1a3a00 100%);
+            padding: 50px 0 80px;
+            position: relative;
             overflow: hidden;
         }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #62ab00, #4d8800);
-            transition: width 0.3s;
+        .profile-banner::after {
+            content:'';
+            position:absolute; inset:0;
+            background: radial-gradient(ellipse 60% 80% at 80% 20%, rgba(236,205,0,.10) 0%, transparent 65%);
+            pointer-events:none;
+        }
+        .profile-banner-inner {
+            display:flex; align-items:center; gap:28px;
+            position:relative; z-index:1;
         }
 
-        .two-column-layout {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
+        /* Avatar with upload overlay */
+        .avatar-wrap {
+            position:relative; flex-shrink:0;
+        }
+        .profile-avatar-img {
+            width:110px; height:110px;
+            border-radius:50%;
+            border: 4px solid rgba(98,171,0,.7);
+            object-fit:cover;
+            display:block;
+        }
+        .avatar-upload-btn {
+            position:absolute; bottom:2px; right:2px;
+            width:32px; height:32px;
+            border-radius:50%;
+            background:var(--green);
+            color:#fff;
+            border:3px solid #1a2600;
+            font-size:13px;
+            cursor:pointer;
+            display:flex; align-items:center; justify-content:center;
+            transition:var(--trans);
+            animation: pulse 2.5s ease infinite;
+        }
+        .avatar-upload-btn:hover { background:#4d8800; }
+        #avatarFileInput { display:none; }
+
+        .banner-info h1 {
+            font-family:'PT Serif',serif;
+            font-size:clamp(22px,3vw,32px);
+            color:#fff; font-weight:700; margin-bottom:6px;
+        }
+        .banner-info .banner-meta {
+            display:flex; gap:18px; flex-wrap:wrap;
+        }
+        .banner-meta span {
+            font-size:13px; color:rgba(255,255,255,.65);
+            display:flex; align-items:center; gap:6px;
+        }
+        .banner-meta .role-tag {
+            padding:4px 14px; border-radius:100px;
+            font-size:12px; font-weight:700;
+            background:rgba(98,171,0,.25);
+            color:#a8ff60; border:1px solid rgba(98,171,0,.4);
         }
 
-        @media (max-width: 968px) {
-            .two-column-layout {
-                grid-template-columns: 1fr;
-            }
+        /* Quick stats row in banner */
+        .banner-stats {
+            display:flex; gap:40px; margin-top:22px; flex-wrap:wrap;
+        }
+        .bstat { text-align:center; }
+        .bstat-num {
+            font-family:'PT Serif',serif;
+            font-size:26px; font-weight:700; color:#fff;
+        }
+        .bstat-label { font-size:11px; color:rgba(255,255,255,.5); text-transform:uppercase; letter-spacing:.5px; }
+
+        /* ── Tab layout ── */
+        .profile-layout {
+            display:grid;
+            grid-template-columns: 240px 1fr;
+            gap:28px;
+            margin-top:-50px;
+            position:relative; z-index:2;
         }
 
-        @media (max-width: 768px) {
-            .profile-header {
-                flex-direction: column;
-                text-align: center;
-            }
-            .quick-stats-bar {
-                flex-wrap: wrap;
-                gap: 15px;
-            }
+        /* Sidebar tabs */
+        .profile-tabs {
+            background:var(--bg);
+            border-radius:var(--radius);
+            box-shadow:var(--shadow);
+            padding:12px 0;
+            height:fit-content;
+            overflow:hidden;
+        }
+        .tab-btn {
+            display:flex; align-items:center; gap:12px;
+            width:100%; padding:12px 20px;
+            background:none; border:none;
+            font-family:'Open Sans',sans-serif;
+            font-size:14px; font-weight:600;
+            color:var(--muted);
+            cursor:pointer;
+            border-left:3px solid transparent;
+            transition:var(--trans);
+            text-align:left;
+        }
+        .tab-btn i { width:18px; text-align:center; font-size:15px; }
+        .tab-btn:hover { color:var(--green); background:rgba(98,171,0,.04); }
+        .tab-btn.active {
+            color:var(--green);
+            background:rgba(98,171,0,.06);
+            border-left-color:var(--green);
+        }
+        .tab-divider {
+            height:1px; background:var(--border);
+            margin:8px 0;
+        }
+        .tab-danger { color:#bd0018 !important; }
+        .tab-danger:hover { background:rgba(189,0,24,.05) !important; }
+        .tab-danger.active { border-left-color:#bd0018 !important; background:rgba(189,0,24,.05) !important; }
+
+        /* Panel */
+        .profile-panel {
+            animation: fadeInUp .4s ease;
+        }
+        .panel-section {
+            display:none;
+        }
+        .panel-section.active {
+            display:block;
+        }
+
+        /* Card */
+        .pcard {
+            background:var(--bg);
+            border-radius:var(--radius);
+            box-shadow:var(--shadow);
+            padding:32px;
+            margin-bottom:22px;
+        }
+        .pcard-title {
+            font-family:'PT Serif',serif;
+            font-size:20px; font-weight:700;
+            color:var(--text);
+            margin-bottom:6px;
+        }
+        .pcard-subtitle {
+            font-size:13px; color:var(--muted);
+            margin-bottom:26px;
+            line-height:1.5;
+        }
+
+        /* ── Form elements ── */
+        .form-grid {
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:20px;
+        }
+        .form-grid.cols-1 { grid-template-columns:1fr; }
+        .form-grid.cols-3 { grid-template-columns:1fr 1fr 1fr; }
+
+        .form-group {
+            display:flex; flex-direction:column; gap:6px;
+        }
+        .form-group.span-2 { grid-column:span 2; }
+
+        label {
+            font-size:12px; font-weight:700;
+            text-transform:uppercase; letter-spacing:.5px;
+            color:var(--text);
+        }
+        label .req { color:var(--red); margin-left:2px; }
+
+        input[type=text],
+        input[type=email],
+        input[type=password],
+        input[type=date],
+        input[type=tel],
+        input[type=number],
+        select,
+        textarea {
+            padding:11px 14px;
+            border:1.5px solid var(--border);
+            border-radius:8px;
+            font-family:'Open Sans',sans-serif;
+            font-size:14px; font-weight:600;
+            color:var(--text);
+            background:var(--bg);
+            transition:var(--trans);
+            width:100%;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline:none;
+            border-color:var(--green);
+            box-shadow:0 0 0 4px rgba(98,171,0,.12);
+        }
+        input::placeholder, textarea::placeholder { color:var(--muted); font-weight:400; }
+        textarea { resize:vertical; min-height:100px; }
+
+        .input-icon-wrap {
+            position:relative;
+        }
+        .input-icon-wrap i {
+            position:absolute; left:13px; top:50%; transform:translateY(-50%);
+            color:var(--muted); font-size:14px;
+            pointer-events:none;
+        }
+        .input-icon-wrap input { padding-left:38px; }
+
+        .input-hint {
+            font-size:12px; color:var(--muted); margin-top:4px;
+        }
+
+        /* Password strength */
+        .pw-strength-bar {
+            height:4px; border-radius:2px;
+            background:var(--border);
+            margin-top:8px; overflow:hidden;
+        }
+        .pw-strength-fill {
+            height:100%; border-radius:2px;
+            width:0; transition:width .4s ease, background .4s ease;
+        }
+        .pw-strength-label {
+            font-size:11px; font-weight:700; margin-top:5px;
+        }
+
+        /* Toggle password */
+        .pw-toggle {
+            position:absolute; right:13px; top:50%; transform:translateY(-50%);
+            cursor:pointer; color:var(--muted); font-size:15px;
+            background:none; border:none;
+            padding:0; line-height:1;
+            transition:color .2s;
+        }
+        .pw-toggle:hover { color:var(--green); }
+
+        /* Radio / gender pills */
+        .radio-group {
+            display:flex; gap:10px; flex-wrap:wrap;
+        }
+        .radio-pill {
+            position:relative;
+        }
+        .radio-pill input[type=radio] {
+            position:absolute; opacity:0; width:0; height:0;
+        }
+        .radio-pill label {
+            display:flex; align-items:center; gap:7px;
+            padding:9px 18px;
+            border:1.5px solid var(--border);
+            border-radius:100px;
+            cursor:pointer;
+            font-size:13px; font-weight:600;
+            color:var(--muted);
+            text-transform:none; letter-spacing:0;
+            transition:var(--trans);
+            white-space:nowrap;
+        }
+        .radio-pill input:checked + label {
+            border-color:var(--green);
+            background:rgba(98,171,0,.08);
+            color:var(--green);
+        }
+        .radio-pill label i { font-size:14px; }
+
+        /* ── Buttons ── */
+        .btn-save {
+            display:inline-flex; align-items:center; gap:8px;
+            padding:12px 30px;
+            background:var(--green); color:#fff;
+            border:none; border-radius:6px;
+            font-family:'Open Sans',sans-serif;
+            font-size:14px; font-weight:700;
+            cursor:pointer; transition:var(--trans);
+        }
+        .btn-save:hover { background:#4d8800; transform:translateY(-2px); box-shadow:0 6px 20px rgba(98,171,0,.25); }
+
+        .btn-cancel {
+            display:inline-flex; align-items:center; gap:8px;
+            padding:12px 24px;
+            background:transparent; color:var(--text);
+            border:1.5px solid var(--border);
+            border-radius:6px;
+            font-family:'Open Sans',sans-serif;
+            font-size:14px; font-weight:600;
+            cursor:pointer; transition:var(--trans);
+        }
+        .btn-cancel:hover { border-color:var(--green); color:var(--green); }
+
+        .btn-danger {
+            display:inline-flex; align-items:center; gap:8px;
+            padding:12px 24px;
+            background:transparent; color:var(--red);
+            border:1.5px solid rgba(189,0,24,.3);
+            border-radius:6px;
+            font-family:'Open Sans',sans-serif;
+            font-size:14px; font-weight:700;
+            cursor:pointer; transition:var(--trans);
+        }
+        .btn-danger:hover { background:rgba(189,0,24,.06); border-color:var(--red); }
+
+        .form-actions {
+            display:flex; gap:12px; align-items:center;
+            margin-top:28px; padding-top:24px;
+            border-top:1px solid var(--border);
+            flex-wrap:wrap;
+        }
+
+        /* Save toast */
+        .save-toast {
+            display:none;
+            align-items:center; gap:8px;
+            padding:10px 18px;
+            background:rgba(98,171,0,.1);
+            border:1px solid rgba(98,171,0,.25);
+            border-radius:8px;
+            font-size:13px; font-weight:700;
+            color:var(--green);
+        }
+        .save-toast.show { display:flex; }
+
+        /* ── Credit card UI ── */
+        .card-visual {
+            background: linear-gradient(135deg, #1a2600 0%, #2e4700 50%, #1a2600 100%);
+            border-radius:16px;
+            padding:28px;
+            color:#fff;
+            margin-bottom:26px;
+            position:relative; overflow:hidden;
+            box-shadow:0 8px 32px rgba(0,0,0,.2);
+        }
+        .card-visual::before {
+            content:'';
+            position:absolute; top:-40px; right:-40px;
+            width:160px; height:160px;
+            border-radius:50%;
+            background:rgba(236,205,0,.08);
+        }
+        .card-visual::after {
+            content:'';
+            position:absolute; bottom:-50px; left:-20px;
+            width:120px; height:120px;
+            border-radius:50%;
+            background:rgba(98,171,0,.1);
+        }
+        .card-logo { font-size:28px; color:var(--gold); margin-bottom:22px; }
+        .card-number {
+            font-size:20px; font-weight:700; letter-spacing:4px;
+            margin-bottom:18px; font-family:'PT Serif',serif;
+        }
+        .card-row { display:flex; justify-content:space-between; align-items:flex-end; }
+        .card-field label { font-size:10px; color:rgba(255,255,255,.5); text-transform:uppercase; letter-spacing:1px; }
+        .card-field .val { font-size:14px; font-weight:700; color:#fff; }
+        .card-network { font-size:32px; color:rgba(255,255,255,.8); }
+
+        .saved-cards {
+            display:flex; flex-direction:column; gap:12px;
+            margin-bottom:24px;
+        }
+        .saved-card-item {
+            display:flex; align-items:center; gap:16px;
+            padding:16px 18px;
+            border:1.5px solid var(--border);
+            border-radius:10px;
+            cursor:pointer; transition:var(--trans);
+        }
+        .saved-card-item:hover { border-color:var(--green); background:rgba(98,171,0,.03); }
+        .saved-card-item.selected { border-color:var(--green); background:rgba(98,171,0,.06); }
+        .card-icon-circle {
+            width:42px; height:42px; border-radius:10px;
+            display:flex; align-items:center; justify-content:center;
+            font-size:20px;
+        }
+        .ci-visa { background:rgba(25,118,210,.1); color:#1976d2; }
+        .ci-mc   { background:rgba(255,87,34,.1);  color:#e64a19; }
+        .ci-amex { background:rgba(98,171,0,.1);   color:var(--green); }
+
+        .card-item-info { flex:1; }
+        .card-item-name { font-size:14px; font-weight:700; color:var(--text); }
+        .card-item-sub  { font-size:12px; color:var(--muted); }
+        .card-item-badge {
+            font-size:11px; font-weight:700; padding:3px 10px;
+            border-radius:100px;
+            background:rgba(98,171,0,.1); color:var(--green);
+        }
+        .card-remove-btn {
+            background:none; border:none;
+            color:var(--muted); cursor:pointer; font-size:16px;
+            transition:color .2s;
+            padding:4px;
+        }
+        .card-remove-btn:hover { color:var(--red); }
+
+        /* Collapse add-card form */
+        .add-card-toggle {
+            display:flex; align-items:center; gap:10px;
+            padding:14px 18px;
+            border:1.5px dashed var(--border);
+            border-radius:10px;
+            background:none;
+            font-family:'Open Sans',sans-serif;
+            font-size:14px; font-weight:600;
+            color:var(--green);
+            cursor:pointer; transition:var(--trans);
+            width:100%;
+        }
+        .add-card-toggle:hover { background:rgba(98,171,0,.05); border-color:var(--green); }
+        .add-card-form { display:none; margin-top:20px; }
+        .add-card-form.open { display:block; }
+
+        /* Card number input with brand icon */
+        .card-input-wrap {
+            position:relative;
+        }
+        .card-brand-icon {
+            position:absolute; right:13px; top:50%; transform:translateY(-50%);
+            font-size:22px; color:var(--muted); pointer-events:none;
+        }
+        .card-input-wrap input { padding-right:50px; font-size:16px; letter-spacing:2px; }
+
+        /* ── Activity feed ── */
+        .activity-list { display:flex; flex-direction:column; gap:2px; }
+        .activity-row {
+            display:flex; align-items:center; gap:14px;
+            padding:13px 16px; border-radius:8px;
+            transition:background .2s;
+        }
+        .activity-row:hover { background:var(--bg2); }
+        .activity-dot {
+            width:36px; height:36px; border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            font-size:14px; flex-shrink:0;
+        }
+        .ad-read  { background:rgba(59,130,246,.1); color:#2563eb; }
+        .ad-write { background:rgba(98,171,0,.1);   color:var(--green); }
+        .ad-earn  { background:rgba(236,205,0,.15); color:#8a7200; }
+        .ad-coin  { background:rgba(189,0,24,.08);  color:var(--red); }
+        .activity-text { flex:1; }
+        .activity-title { font-size:14px; font-weight:600; color:var(--text); }
+        .activity-time  { font-size:12px; color:var(--muted); }
+
+        /* ── Stats cards ── */
+        .stats-mini-grid {
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+            gap:16px; margin-bottom:24px;
+        }
+        .stat-mini-card {
+            background:var(--bg);
+            border:1px solid var(--border);
+            border-radius:12px; padding:20px;
+            text-align:center;
+            box-shadow:0 2px 8px rgba(0,0,0,.04);
+            transition:var(--trans);
+        }
+        .stat-mini-card:hover { transform:translateY(-4px); box-shadow:0 6px 20px rgba(98,171,0,.1); }
+        .smc-icon { font-size:22px; color:var(--green); margin-bottom:10px; }
+        .smc-val  { font-family:'PT Serif',serif; font-size:28px; font-weight:700; color:var(--text); }
+        .smc-label { font-size:12px; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.5px; margin-top:4px; }
+
+        /* ── Danger zone ── */
+        .danger-zone {
+            border:1.5px solid rgba(189,0,24,.25);
+            border-radius:var(--radius);
+            padding:28px; background:rgba(189,0,24,.02);
+        }
+        .danger-zone h3 {
+            font-family:'PT Serif',serif; font-size:18px;
+            color:var(--red); margin-bottom:8px;
+            display:flex; align-items:center; gap:8px;
+        }
+        .danger-zone p { font-size:14px; color:var(--muted); margin-bottom:20px; line-height:1.6; }
+        .danger-actions { display:flex; gap:12px; flex-wrap:wrap; }
+
+        /* ── Responsive ── */
+        @media (max-width:900px) {
+            .profile-layout { grid-template-columns:1fr; }
+            .profile-tabs { display:flex; overflow-x:auto; gap:0; border-radius:var(--radius); }
+            .tab-btn { white-space:nowrap; border-left:none; border-bottom:3px solid transparent; padding:12px 16px; }
+            .tab-btn.active { border-bottom-color:var(--green); border-left-color:transparent; }
+            .tab-divider { display:none; }
+            .form-grid.cols-3 { grid-template-columns:1fr 1fr; }
+        }
+        @media (max-width:600px) {
+            .profile-banner { padding:36px 0 70px; }
+            .profile-banner-inner { flex-direction:column; text-align:center; }
+            .banner-stats { justify-content:center; gap:24px; }
+            .form-grid { grid-template-columns:1fr; }
+            .form-group.span-2 { grid-column:span 1; }
+            .pcard { padding:20px; }
         }
     </style>
 </head>
+
 <body>
+
+    <!-- ── Navigation ── -->
     <nav class="navbar">
         <div class="container">
             <div class="nav-brand">
@@ -329,23 +552,24 @@
                 <span>StoryVerse</span>
             </div>
             <div class="nav-menu">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="discover.html" class="nav-link">Discover</a>
-                <a href="trending.html" class="nav-link">Trending</a>
-                <a href="library.html" class="nav-link">My Library</a>
-                <a href="wallet.html" class="nav-link">Wallet</a>
+                <a href="index.html"         class="nav-link">Home</a>
+                <a href="discover.html"      class="nav-link">Discover</a>
+                <a href="trending.html"      class="nav-link">Trending</a>
+                <a href="become-writer.html" class="nav-link">Become a Writer</a>
             </div>
             <div class="nav-actions">
                 <button class="btn-secondary" id="loginBtn">Login</button>
-                <button class="btn-primary" id="signupBtn">Sign Up</button>
-                <div class="user-menu" id="userMenu" style="display: none;">
-                    <img src="https://ui-avatars.com/api/?name=User&background=eccd00&color=282828" alt="User" class="user-avatar" id="userAvatar">
+                <button class="btn-primary"   id="signupBtn">Sign Up</button>
+                <div class="user-menu" id="userMenu" style="display:none;">
+                    <img src="https://ui-avatars.com/api/?name=User&background=eccd00&color=282828"
+                         alt="User" class="user-avatar" id="userAvatar">
                     <div class="dropdown-menu" id="dropdownMenu">
                         <a href="profile.html"><i class="fas fa-user"></i> My Profile</a>
                         <a href="library.html"><i class="fas fa-book"></i> My Library</a>
                         <a href="wallet.html"><i class="fas fa-wallet"></i> Wallet</a>
-                        <a href="creator-studio.html" id="creatorStudioLink" style="display: none;"><i class="fas fa-pen"></i> Creator Studio</a>
-                        <a href="admin.html" id="adminLink" style="display: none;"><i class="fas fa-shield-alt"></i> Admin Panel</a>
+                        <a href="creator-studio.html" id="creatorStudioLink" style="display:none;">
+                            <i class="fas fa-pen"></i> Creator Studio
+                        </a>
                         <hr>
                         <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
                     </div>
@@ -354,40 +578,566 @@
         </div>
     </nav>
 
-    <section class="profile-container">
+    <!-- ══════════════════════════════════════════
+         PROFILE BANNER
+    ══════════════════════════════════════════ -->
+    <div class="profile-banner">
         <div class="container">
-            <!-- Profile Header -->
-            <div class="profile-header">
-                <div class="profile-avatar-section">
-                    <img src="https://ui-avatars.com/api/?name=Demo+User&background=62ab00&color=fff&size=150" alt="Profile" class="profile-avatar-large" id="profileAvatarLarge">
-                    <button class="btn-secondary" style="margin-top: 1rem;">
-                        <i class="fas fa-camera"></i> Change Photo
+            <div class="profile-banner-inner">
+                <div class="avatar-wrap">
+                    <img id="profileAvatarImg"
+                         src="https://ui-avatars.com/api/?name=Demo+User&background=62ab00&color=fff&size=200"
+                         alt="Profile Photo" class="profile-avatar-img">
+                    <button class="avatar-upload-btn" onclick="document.getElementById('avatarFileInput').click()" title="Change photo">
+                        <i class="fas fa-camera"></i>
                     </button>
+                    <input type="file" id="avatarFileInput" accept="image/*">
                 </div>
-                <div class="profile-info-section">
-                    <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
-                        <h1 id="profileName">Demo User</h1>
-                        <div class="profile-role-badge" id="roleBadge">
-                            <i class="fas fa-user"></i> Reader
-                        </div>
+
+                <div class="banner-info">
+                    <h1 id="bannerName">Demo User</h1>
+                    <div class="banner-meta">
+                        <span><i class="fas fa-at"></i> <span id="bannerUsername">@demouser</span></span>
+                        <span><i class="fas fa-envelope"></i> <span id="bannerEmail">demo@storyverse.com</span></span>
+                        <span><i class="fas fa-calendar-alt"></i> Joined <span id="bannerJoined">May 2026</span></span>
+                        <span class="role-tag" id="bannerRole"><i class="fas fa-book-reader"></i> Reader</span>
                     </div>
-                    <p class="profile-meta"><i class="fas fa-envelope"></i> <span id="profileEmail">demo@storyverse.com</span></p>
-                    <p class="profile-meta"><i class="fas fa-calendar-alt"></i> Member since <span id="joinDate">May 2026</span></p>
-                    <p class="profile-bio" id="profileBio">Welcome to StoryVerse!</p>
-                    
-                    <!-- Quick Stats Bar -->
-                    <div class="quick-stats-bar" id="quickStatsBar"></div>
-                    
-                    <!-- Role-specific actions -->
-                    <div class="profile-actions" id="profileActions"></div>
+                    <div class="banner-stats" id="bannerStats">
+                        <!-- filled by JS -->
+                    </div>
                 </div>
             </div>
-
-            <!-- Role-specific Content -->
-            <div id="roleContent"></div>
         </div>
-    </section>
+    </div>
 
+    <!-- ══════════════════════════════════════════
+         MAIN LAYOUT
+    ══════════════════════════════════════════ -->
+    <div class="profile-page">
+        <div class="container">
+            <div class="profile-layout">
+
+                <!-- ── Sidebar Tabs ── -->
+                <aside class="profile-tabs" id="profileTabs">
+                    <button class="tab-btn active" data-tab="overview">
+                        <i class="fas fa-user-circle"></i> Overview
+                    </button>
+                    <button class="tab-btn" data-tab="edit-profile">
+                        <i class="fas fa-user-edit"></i> Edit Profile
+                    </button>
+                    <button class="tab-btn" data-tab="security">
+                        <i class="fas fa-lock"></i> Password & Security
+                    </button>
+                    <button class="tab-btn" data-tab="payment">
+                        <i class="fas fa-credit-card"></i> Payment Info
+                    </button>
+                    <div class="tab-divider"></div>
+                    <button class="tab-btn" data-tab="activity">
+                        <i class="fas fa-history"></i> Activity
+                    </button>
+                    <div class="tab-divider"></div>
+                    <button class="tab-btn tab-danger" data-tab="danger">
+                        <i class="fas fa-exclamation-triangle"></i> Danger Zone
+                    </button>
+                </aside>
+
+                <!-- ── Panel ── -->
+                <main class="profile-panel">
+
+                    <!-- ════════ OVERVIEW ════════ -->
+                    <section class="panel-section active" id="tab-overview">
+                        <div class="stats-mini-grid" id="overviewStats">
+                            <!-- filled by JS -->
+                        </div>
+
+                        <div class="pcard">
+                            <div class="pcard-title">Account Summary</div>
+                            <div class="pcard-subtitle">Your profile at a glance.</div>
+
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;" id="overviewDetails">
+                                <!-- filled by JS -->
+                            </div>
+                        </div>
+
+                        <div class="pcard">
+                            <div class="pcard-title">Recent Activity</div>
+                            <div class="pcard-subtitle">Your latest actions on the platform.</div>
+                            <div class="activity-list" id="overviewActivity">
+                                <!-- filled by JS -->
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ════════ EDIT PROFILE ════════ -->
+                    <section class="panel-section" id="tab-edit-profile">
+                        <div class="pcard">
+                            <div class="pcard-title">Personal Information</div>
+                            <div class="pcard-subtitle">Update your name, username, bio and other details.</div>
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="firstName">First Name <span class="req">*</span></label>
+                                    <div class="input-icon-wrap">
+                                        <i class="fas fa-user"></i>
+                                        <input type="text" id="firstName" placeholder="e.g. Alex" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Last Name <span class="req">*</span></label>
+                                    <div class="input-icon-wrap">
+                                        <i class="fas fa-user"></i>
+                                        <input type="text" id="lastName" placeholder="e.g. Rahman">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="username">Username <span class="req">*</span></label>
+                                    <div class="input-icon-wrap">
+                                        <i class="fas fa-at"></i>
+                                        <input type="text" id="username" placeholder="e.g. alex_writes" oninput="checkUsername(this)">
+                                    </div>
+                                    <span class="input-hint" id="usernameHint">Letters, numbers and underscores only.</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email Address <span class="req">*</span></label>
+                                    <div class="input-icon-wrap">
+                                        <i class="fas fa-envelope"></i>
+                                        <input type="email" id="email" placeholder="you@example.com">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="phone">Phone / Mobile</label>
+                                    <div class="input-icon-wrap">
+                                        <i class="fas fa-phone"></i>
+                                        <input type="tel" id="phone" placeholder="+880 1xxx-xxxxxx">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="birthdate">Date of Birth</label>
+                                    <div class="input-icon-wrap">
+                                        <i class="fas fa-birthday-cake"></i>
+                                        <input type="date" id="birthdate">
+                                    </div>
+                                </div>
+
+                                <div class="form-group span-2">
+                                    <label>Gender</label>
+                                    <div class="radio-group">
+                                        <div class="radio-pill">
+                                            <input type="radio" name="gender" id="gMale" value="male">
+                                            <label for="gMale"><i class="fas fa-mars"></i> Male</label>
+                                        </div>
+                                        <div class="radio-pill">
+                                            <input type="radio" name="gender" id="gFemale" value="female">
+                                            <label for="gFemale"><i class="fas fa-venus"></i> Female</label>
+                                        </div>
+                                        <div class="radio-pill">
+                                            <input type="radio" name="gender" id="gOther" value="other">
+                                            <label for="gOther"><i class="fas fa-genderless"></i> Other</label>
+                                        </div>
+                                        <div class="radio-pill">
+                                            <input type="radio" name="gender" id="gNone" value="prefer_not" checked>
+                                            <label for="gNone"><i class="fas fa-user-secret"></i> Prefer not to say</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group span-2">
+                                    <label for="bio">Bio / About Me</label>
+                                    <textarea id="bio" placeholder="Tell readers a little about yourself — your writing style, favourite genres, inspiration..."></textarea>
+                                    <span class="input-hint" id="bioCount">0 / 300 characters</span>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button class="btn-save" onclick="savePersonalInfo()">
+                                    <i class="fas fa-save"></i> Save Changes
+                                </button>
+                                <button class="btn-cancel" onclick="resetPersonalInfo()">
+                                    <i class="fas fa-undo"></i> Reset
+                                </button>
+                                <div class="save-toast" id="personalToast">
+                                    <i class="fas fa-check-circle"></i> Profile updated!
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Address -->
+                        <div class="pcard">
+                            <div class="pcard-title">Address</div>
+                            <div class="pcard-subtitle">Used for payout and invoice details.</div>
+
+                            <div class="form-grid">
+                                <div class="form-group span-2">
+                                    <label for="addressLine1">Address Line 1</label>
+                                    <div class="input-icon-wrap">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <input type="text" id="addressLine1" placeholder="House no., Road, Area">
+                                    </div>
+                                </div>
+                                <div class="form-group span-2">
+                                    <label for="addressLine2">Address Line 2</label>
+                                    <input type="text" id="addressLine2" placeholder="Apartment, suite, floor (optional)">
+                                </div>
+                                <div class="form-group">
+                                    <label for="city">City</label>
+                                    <input type="text" id="city" placeholder="e.g. Dhaka">
+                                </div>
+                                <div class="form-group">
+                                    <label for="district">District / State</label>
+                                    <input type="text" id="district" placeholder="e.g. Dhaka">
+                                </div>
+                                <div class="form-group">
+                                    <label for="postalCode">Postal / ZIP Code</label>
+                                    <input type="text" id="postalCode" placeholder="e.g. 1207">
+                                </div>
+                                <div class="form-group">
+                                    <label for="country">Country</label>
+                                    <select id="country">
+                                        <option value="">Select country</option>
+                                        <option value="BD" selected>🇧🇩 Bangladesh</option>
+                                        <option value="IN">🇮🇳 India</option>
+                                        <option value="PK">🇵🇰 Pakistan</option>
+                                        <option value="US">🇺🇸 United States</option>
+                                        <option value="GB">🇬🇧 United Kingdom</option>
+                                        <option value="CA">🇨🇦 Canada</option>
+                                        <option value="AU">🇦🇺 Australia</option>
+                                        <option value="OTHER">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button class="btn-save" onclick="saveAddress()">
+                                    <i class="fas fa-save"></i> Save Address
+                                </button>
+                                <div class="save-toast" id="addressToast">
+                                    <i class="fas fa-check-circle"></i> Address saved!
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ════════ SECURITY ════════ -->
+                    <section class="panel-section" id="tab-security">
+                        <div class="pcard">
+                            <div class="pcard-title">Change Password</div>
+                            <div class="pcard-subtitle">Choose a strong password with at least 8 characters.</div>
+
+                            <div class="form-grid cols-1" style="max-width:480px;">
+                                <div class="form-group">
+                                    <label for="currentPw">Current Password <span class="req">*</span></label>
+                                    <div class="input-icon-wrap" style="position:relative;">
+                                        <i class="fas fa-lock"></i>
+                                        <input type="password" id="currentPw" placeholder="Enter your current password">
+                                        <button class="pw-toggle" type="button" onclick="togglePw('currentPw', this)">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="newPw">New Password <span class="req">*</span></label>
+                                    <div class="input-icon-wrap" style="position:relative;">
+                                        <i class="fas fa-key"></i>
+                                        <input type="password" id="newPw" placeholder="At least 8 characters"
+                                               oninput="checkStrength(this.value)">
+                                        <button class="pw-toggle" type="button" onclick="togglePw('newPw', this)">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div class="pw-strength-bar">
+                                        <div class="pw-strength-fill" id="pwFill"></div>
+                                    </div>
+                                    <div class="pw-strength-label" id="pwStrengthLabel" style="color:var(--muted);"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="confirmPw">Confirm New Password <span class="req">*</span></label>
+                                    <div class="input-icon-wrap" style="position:relative;">
+                                        <i class="fas fa-shield-alt"></i>
+                                        <input type="password" id="confirmPw" placeholder="Repeat new password"
+                                               oninput="checkMatch()">
+                                        <button class="pw-toggle" type="button" onclick="togglePw('confirmPw', this)">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <span class="input-hint" id="pwMatchHint"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button class="btn-save" onclick="changePassword()">
+                                    <i class="fas fa-lock"></i> Update Password
+                                </button>
+                                <div class="save-toast" id="pwToast">
+                                    <i class="fas fa-check-circle"></i> Password changed!
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pcard">
+                            <div class="pcard-title">Login Sessions</div>
+                            <div class="pcard-subtitle">Devices currently signed in to your account.</div>
+
+                            <div class="activity-list">
+                                <div class="activity-row" style="justify-content:space-between;">
+                                    <div style="display:flex;align-items:center;gap:14px;">
+                                        <div class="activity-dot ad-write">
+                                            <i class="fas fa-desktop"></i>
+                                        </div>
+                                        <div>
+                                            <div class="activity-title">Windows 11 — Chrome</div>
+                                            <div class="activity-time"><i class="fas fa-map-pin" style="font-size:10px;"></i> Dhaka, BD &bull; Active now</div>
+                                        </div>
+                                    </div>
+                                    <span style="font-size:12px;font-weight:700;background:rgba(98,171,0,.1);color:var(--green);padding:4px 12px;border-radius:100px;">Current</span>
+                                </div>
+                                <div class="activity-row" style="justify-content:space-between;">
+                                    <div style="display:flex;align-items:center;gap:14px;">
+                                        <div class="activity-dot ad-read">
+                                            <i class="fas fa-mobile-alt"></i>
+                                        </div>
+                                        <div>
+                                            <div class="activity-title">Android — Chrome Mobile</div>
+                                            <div class="activity-time"><i class="fas fa-map-pin" style="font-size:10px;"></i> Dhaka, BD &bull; 2 hours ago</div>
+                                        </div>
+                                    </div>
+                                    <button class="btn-danger" onclick="revokeSession(this)" style="padding:6px 14px;font-size:12px;">Revoke</button>
+                                </div>
+                            </div>
+
+                            <div class="form-actions" style="border-top:none;padding-top:0;margin-top:16px;">
+                                <button class="btn-danger" onclick="revokeAll()">
+                                    <i class="fas fa-sign-out-alt"></i> Sign Out All Other Devices
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ════════ PAYMENT ════════ -->
+                    <section class="panel-section" id="tab-payment">
+
+                        <!-- Live card visual -->
+                        <div class="pcard">
+                            <div class="pcard-title">Card Preview</div>
+                            <div class="pcard-subtitle">This updates live as you type your card details below.</div>
+                            <div class="card-visual">
+                                <div class="card-logo"><i class="fas fa-book-open"></i></div>
+                                <div class="card-number" id="cardPreviewNum">•••• •••• •••• ••••</div>
+                                <div class="card-row">
+                                    <div>
+                                        <div class="card-field">
+                                            <label>Card Holder</label>
+                                            <div class="val" id="cardPreviewName">YOUR NAME</div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="card-field">
+                                            <label>Expires</label>
+                                            <div class="val" id="cardPreviewExp">MM / YY</div>
+                                        </div>
+                                    </div>
+                                    <div class="card-network" id="cardNetworkIcon">
+                                        <i class="fas fa-credit-card"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Saved cards -->
+                        <div class="pcard">
+                            <div class="pcard-title">Saved Payment Methods</div>
+                            <div class="pcard-subtitle">Your stored cards for quick checkout.</div>
+
+                            <div class="saved-cards" id="savedCardsList">
+                                <div class="saved-card-item selected" data-id="1">
+                                    <div class="card-icon-circle ci-visa"><i class="fab fa-cc-visa"></i></div>
+                                    <div class="card-item-info">
+                                        <div class="card-item-name">Visa •••• 4242</div>
+                                        <div class="card-item-sub">Expires 08/28 &bull; Alex Rahman</div>
+                                    </div>
+                                    <span class="card-item-badge">Default</span>
+                                    <button class="card-remove-btn" onclick="removeCard(this, '1')" title="Remove"><i class="fas fa-trash-alt"></i></button>
+                                </div>
+                                <div class="saved-card-item" data-id="2">
+                                    <div class="card-icon-circle ci-mc"><i class="fab fa-cc-mastercard"></i></div>
+                                    <div class="card-item-info">
+                                        <div class="card-item-name">Mastercard •••• 1881</div>
+                                        <div class="card-item-sub">Expires 03/27 &bull; Alex Rahman</div>
+                                    </div>
+                                    <button class="card-remove-btn" onclick="removeCard(this, '2')" title="Remove"><i class="fas fa-trash-alt"></i></button>
+                                </div>
+                            </div>
+
+                            <!-- Add new card -->
+                            <button class="add-card-toggle" id="addCardToggle" onclick="toggleAddCard()">
+                                <i class="fas fa-plus-circle"></i> Add New Card
+                            </button>
+
+                            <div class="add-card-form" id="addCardForm">
+                                <div class="form-grid" style="margin-top:4px;">
+                                    <div class="form-group span-2">
+                                        <label for="cardNumber">Card Number <span class="req">*</span></label>
+                                        <div class="card-input-wrap">
+                                            <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456"
+                                                   maxlength="19" oninput="formatCardNum(this)" autocomplete="cc-number">
+                                            <i class="fas fa-credit-card card-brand-icon" id="cardBrandIcon"></i>
+                                        </div>
+                                    </div>
+                                    <div class="form-group span-2">
+                                        <label for="cardHolder">Cardholder Name <span class="req">*</span></label>
+                                        <div class="input-icon-wrap">
+                                            <i class="fas fa-user"></i>
+                                            <input type="text" id="cardHolder" placeholder="Name as on card"
+                                                   oninput="updateCardPreview()" autocomplete="cc-name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cardExpiry">Expiry Date <span class="req">*</span></label>
+                                        <div class="input-icon-wrap">
+                                            <i class="fas fa-calendar"></i>
+                                            <input type="text" id="cardExpiry" placeholder="MM / YY"
+                                                   maxlength="7" oninput="formatExpiry(this)" autocomplete="cc-exp">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cardCvv">CVV / CVC <span class="req">*</span></label>
+                                        <div class="input-icon-wrap">
+                                            <i class="fas fa-shield-alt"></i>
+                                            <input type="password" id="cardCvv" placeholder="•••"
+                                                   maxlength="4" autocomplete="cc-csc">
+                                        </div>
+                                        <span class="input-hint">3–4 digit code on the back of the card.</span>
+                                    </div>
+                                    <div class="form-group span-2">
+                                        <label>Billing Address</label>
+                                        <div class="radio-group">
+                                            <div class="radio-pill">
+                                                <input type="radio" name="billingAddr" id="baSame" value="same" checked>
+                                                <label for="baSame"><i class="fas fa-copy"></i> Same as profile address</label>
+                                            </div>
+                                            <div class="radio-pill">
+                                                <input type="radio" name="billingAddr" id="baDiff" value="different">
+                                                <label for="baDiff"><i class="fas fa-edit"></i> Use different address</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="display:flex;align-items:center;gap:10px;margin-top:8px;font-size:13px;color:var(--muted);">
+                                    <i class="fas fa-lock" style="color:var(--green);"></i>
+                                    Your card details are encrypted with 256-bit SSL. We never store raw card data.
+                                </div>
+
+                                <div class="form-actions">
+                                    <button class="btn-save" onclick="saveCard()">
+                                        <i class="fas fa-plus"></i> Add Card
+                                    </button>
+                                    <button class="btn-cancel" onclick="toggleAddCard()">Cancel</button>
+                                    <div class="save-toast" id="cardToast">
+                                        <i class="fas fa-check-circle"></i> Card added!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- bKash / Mobile Banking -->
+                        <div class="pcard">
+                            <div class="pcard-title">Mobile Banking</div>
+                            <div class="pcard-subtitle">bKash, Nagad or Rocket number for payouts.</div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="bkashNum">bKash Number</label>
+                                    <div class="input-icon-wrap">
+                                        <i class="fas fa-mobile-alt"></i>
+                                        <input type="tel" id="bkashNum" placeholder="01XXXXXXXXX">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="nagadNum">Nagad Number</label>
+                                    <div class="input-icon-wrap">
+                                        <i class="fas fa-mobile-alt"></i>
+                                        <input type="tel" id="nagadNum" placeholder="01XXXXXXXXX">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="rocketNum">Rocket Number</label>
+                                    <div class="input-icon-wrap">
+                                        <i class="fas fa-mobile-alt"></i>
+                                        <input type="tel" id="rocketNum" placeholder="01XXXXXXXXX">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="defaultPayout">Default Payout Method</label>
+                                    <select id="defaultPayout">
+                                        <option value="bkash">bKash</option>
+                                        <option value="nagad">Nagad</option>
+                                        <option value="rocket">Rocket</option>
+                                        <option value="bank">Bank Transfer</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button class="btn-save" onclick="saveMobileBanking()">
+                                    <i class="fas fa-save"></i> Save
+                                </button>
+                                <div class="save-toast" id="mobileToast">
+                                    <i class="fas fa-check-circle"></i> Mobile banking info saved!
+                                </div>
+                            </div>
+                        </div>
+
+                    </section>
+
+                    <!-- ════════ ACTIVITY ════════ -->
+                    <section class="panel-section" id="tab-activity">
+                        <div class="pcard">
+                            <div class="pcard-title">All Activity</div>
+                            <div class="pcard-subtitle">Everything you've done on StoryVerse.</div>
+                            <div class="activity-list" id="fullActivityList">
+                                <!-- filled by JS -->
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ════════ DANGER ZONE ════════ -->
+                    <section class="panel-section" id="tab-danger">
+                        <div class="pcard">
+                            <div class="pcard-title" style="color:var(--red);">
+                                <i class="fas fa-exclamation-triangle"></i> Danger Zone
+                            </div>
+                            <div class="pcard-subtitle">Irreversible account actions. Please read carefully.</div>
+
+                            <div class="danger-zone" style="margin-bottom:20px;">
+                                <h3><i class="fas fa-user-slash"></i> Deactivate Account</h3>
+                                <p>Temporarily disable your account. Your profile and content will be hidden from other users. You can reactivate at any time by logging in again.</p>
+                                <div class="danger-actions">
+                                    <button class="btn-danger" onclick="deactivateAccount()">
+                                        <i class="fas fa-power-off"></i> Deactivate My Account
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="danger-zone">
+                                <h3><i class="fas fa-trash-alt"></i> Delete Account Permanently</h3>
+                                <p>This will <strong>permanently delete</strong> your account, all your published stories, chapters, earnings history and personal data. This action <strong>cannot be undone</strong>.</p>
+                                <div class="danger-actions">
+                                    <button class="btn-danger" onclick="confirmDelete()">
+                                        <i class="fas fa-trash-alt"></i> Delete My Account Forever
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Footer ── -->
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
@@ -398,6 +1148,7 @@
                 <div class="footer-col">
                     <h4>For Writers</h4>
                     <ul>
+                        <li><a href="become-writer.html">Become a Writer</a></li>
                         <li><a href="creator-studio.html">Creator Studio</a></li>
                     </ul>
                 </div>
@@ -406,13 +1157,15 @@
                     <ul>
                         <li><a href="discover.html">Discover Stories</a></li>
                         <li><a href="wallet.html">Buy Coins</a></li>
+                        <li><a href="library.html">My Library</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h4>Legal</h4>
                     <ul>
-                        <li><a href="terms.html">Terms of Service</a></li>
-                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Help Center</a></li>
                     </ul>
                 </div>
             </div>
@@ -422,414 +1175,6 @@
         </div>
     </footer>
 
-    <script>
-        // Demo user data
-        const demoUsers = {
-            reader: {
-                name: 'Alex Reader',
-                email: 'reader@storyverse.com',
-                role: 'reader',
-                avatar: 'https://ui-avatars.com/api/?name=Alex+Reader&background=3b82f6&color=fff&size=150',
-                joinDate: 'January 15, 2026',
-                bio: 'Avid reader and book enthusiast. Love fantasy, sci-fi, and romance novels. Always looking for the next great story!',
-                stats: {
-                    booksRead: 24,
-                    chaptersRead: 342,
-                    coinsSpent: 1250,
-                    readingStreak: 15,
-                    favoriteGenre: 'Fantasy',
-                    totalReadingTime: '127 hours',
-                    reviewsWritten: 18,
-                    booksInLibrary: 47,
-                    avgRating: 4.5
-                },
-                recentActivity: [
-                    { type: 'read', text: 'Finished reading "The Last Kingdom" Chapter 5', time: '2 hours ago' },
-                    { type: 'read', text: 'Added "Dragon\'s Legacy" to library', time: '1 day ago' },
-                    { type: 'read', text: 'Left a 5-star review on "Shadows of Tomorrow"', time: '2 days ago' },
-                    { type: 'read', text: 'Unlocked Chapter 12 of "Eternal Flames"', time: '3 days ago' },
-                    { type: 'read', text: 'Completed "Whispers in the Dark"', time: '5 days ago' }
-                ]
-            },
-            writer: {
-                name: 'Sarah Writer',
-                email: 'writer@storyverse.com',
-                role: 'writer',
-                avatar: 'https://ui-avatars.com/api/?name=Sarah+Writer&background=62ab00&color=fff&size=150',
-                joinDate: 'March 10, 2025',
-                bio: 'Fantasy and adventure writer. Published author with 3 ongoing series. Passionate about creating immersive worlds and compelling characters.',
-                stats: {
-                    booksPublished: 3,
-                    totalChapters: 87,
-                    totalViews: 125000,
-                    totalEarnings: 4250,
-                    followers: 1842,
-                    avgRating: 4.7,
-                    totalReviews: 342,
-                    monthlyViews: 15420,
-                    monthlyEarnings: 850,
-                    nextPayout: 850,
-                    completionRate: 68,
-                    avgChapterViews: 1437
-                },
-                recentActivity: [
-                    { type: 'write', text: 'Published Chapter 30 of "The Last Kingdom"', time: '3 hours ago' },
-                    { type: 'earn', text: 'Earned ৳125 from chapter unlocks', time: '1 day ago' },
-                    { type: 'write', text: 'Gained 50 new followers', time: '2 days ago' },
-                    { type: 'write', text: 'Reached 100K total views milestone', time: '5 days ago' },
-                    { type: 'earn', text: 'Received payout of ৳750', time: '1 week ago' }
-                ]
-            },
-            admin: {
-                name: 'Admin User',
-                email: 'admin@storyverse.com',
-                role: 'admin',
-                avatar: 'https://ui-avatars.com/api/?name=Admin+User&background=bd0018&color=fff&size=150',
-                joinDate: 'January 1, 2025',
-                bio: 'Platform administrator managing content, users, and ensuring a safe and thriving community.',
-                stats: {
-                    totalUsers: 15420,
-                    totalBooks: 3842,
-                    activeWriters: 892,
-                    pendingReports: 12,
-                    platformRevenue: 125000,
-                    newUsersToday: 47,
-                    activeReaders: 8234,
-                    approvedBooks: 3830
-                },
-                recentActivity: []
-            }
-        };
-
-        // Get current user role
-        const urlParams = new URLSearchParams(window.location.search);
-        const userRole = urlParams.get('role') || 'reader';
-        const currentUser = demoUsers[userRole];
-
-        // Load profile
-        function loadProfile() {
-            document.getElementById('profileName').textContent = currentUser.name;
-            document.getElementById('profileEmail').querySelector('span').textContent = currentUser.email;
-            document.getElementById('joinDate').textContent = currentUser.joinDate;
-            document.getElementById('profileBio').textContent = currentUser.bio;
-            document.getElementById('profileAvatarLarge').src = currentUser.avatar;
-            document.getElementById('userAvatar').src = currentUser.avatar;
-
-            const roleBadge = document.getElementById('roleBadge');
-            roleBadge.className = `profile-role-badge ${currentUser.role}`;
-            
-            if (currentUser.role === 'reader') {
-                roleBadge.innerHTML = '<i class="fas fa-book-reader"></i> Reader';
-            } else if (currentUser.role === 'writer') {
-                roleBadge.innerHTML = '<i class="fas fa-pen-fancy"></i> Writer';
-                document.getElementById('creatorStudioLink').style.display = 'block';
-            } else if (currentUser.role === 'admin') {
-                roleBadge.innerHTML = '<i class="fas fa-shield-alt"></i> Administrator';
-                document.getElementById('creatorStudioLink').style.display = 'block';
-                document.getElementById('adminLink').style.display = 'block';
-            }
-
-            loadQuickStats();
-            loadRoleContent();
-        }
-
-        function loadQuickStats() {
-            const container = document.getElementById('quickStatsBar');
-            
-            if (currentUser.role === 'reader') {
-                container.innerHTML = `
-                    <div class="quick-stat">
-                        <div class="quick-stat-value">${currentUser.stats.booksRead}</div>
-                        <div class="quick-stat-label">Books Read</div>
-                    </div>
-                    <div class="quick-stat">
-                        <div class="quick-stat-value">${currentUser.stats.readingStreak}</div>
-                        <div class="quick-stat-label">Day Streak</div>
-                    </div>
-                    <div class="quick-stat">
-                        <div class="quick-stat-value">${currentUser.stats.reviewsWritten}</div>
-                        <div class="quick-stat-label">Reviews</div>
-                    </div>
-                    <div class="quick-stat">
-                        <div class="quick-stat-value">${currentUser.stats.avgRating}</div>
-                        <div class="quick-stat-label">Avg Rating</div>
-                    </div>
-                `;
-            } else if (currentUser.role === 'writer') {
-                container.innerHTML = `
-                    <div class="quick-stat">
-                        <div class="quick-stat-value">${currentUser.stats.booksPublished}</div>
-                        <div class="quick-stat-label">Books</div>
-                    </div>
-                    <div class="quick-stat">
-                        <div class="quick-stat-value">${(currentUser.stats.totalViews / 1000).toFixed(0)}K</div>
-                        <div class="quick-stat-label">Total Views</div>
-                    </div>
-                    <div class="quick-stat">
-                        <div class="quick-stat-value">${currentUser.stats.followers}</div>
-                        <div class="quick-stat-label">Followers</div>
-                    </div>
-                    <div class="quick-stat">
-                        <div class="quick-stat-value">$${currentUser.stats.monthlyEarnings}</div>
-                        <div class="quick-stat-label">This Month</div>
-                    </div>
-                `;
-            } else {
-                container.innerHTML = `
-                    <div class="quick-stat">
-                        <div class="quick-stat-value">${(currentUser.stats.totalUsers / 1000).toFixed(1)}K</div>
-                        <div class="quick-stat-label">Users</div>
-                    </div>
-                    <div class="quick-stat">
-                        <div class="quick-stat-value">${currentUser.stats.activeWriters}</div>
-                        <div class="quick-stat-label">Writers</div>
-                    </div>
-                    <div class="quick-stat">
-                        <div class="quick-stat-value">${currentUser.stats.pendingReports}</div>
-                        <div class="quick-stat-label">Reports</div>
-                    </div>
-                `;
-            }
-        }
-
-        function loadRoleContent() {
-            const actionsContainer = document.getElementById('profileActions');
-            const contentContainer = document.getElementById('roleContent');
-
-            if (currentUser.role === 'reader') {
-                actionsContainer.innerHTML = `
-                    <button class="btn-primary" onclick="window.location.href='library.html'">
-                        <i class="fas fa-book"></i> My Library
-                    </button>
-                    <button class="btn-secondary" onclick="window.location.href='wallet.html'">
-                        <i class="fas fa-wallet"></i> My Wallet
-                    </button>
-                    <button class="btn-secondary" onclick="becomeWriter()">
-                        <i class="fas fa-pen"></i> Become a Writer
-                    </button>
-                `;
-
-                contentContainer.innerHTML = `
-                    <div class="two-column-layout">
-                        <div>
-                            <div class="stats-grid">
-                                <div class="stat-card">
-                                    <div class="stat-icon"><i class="fas fa-book"></i></div>
-                                    <h3>Books Read</h3>
-                                    <div class="stat-value">${currentUser.stats.booksRead}</div>
-                                </div>
-                                <div class="stat-card">
-                                    <div class="stat-icon"><i class="fas fa-bookmark"></i></div>
-                                    <h3>Chapters Read</h3>
-                                    <div class="stat-value">${currentUser.stats.chaptersRead}</div>
-                                </div>
-                                <div class="stat-card">
-                                    <div class="stat-icon"><i class="fas fa-coins"></i></div>
-                                    <h3>Coins Spent</h3>
-                                    <div class="stat-value">${currentUser.stats.coinsSpent}</div>
-                                </div>
-                                <div class="stat-card">
-                                    <div class="stat-icon"><i class="fas fa-fire"></i></div>
-                                    <h3>Reading Streak</h3>
-                                    <div class="stat-value">${currentUser.stats.readingStreak} days</div>
-                                </div>
-                            </div>
-
-                            <div class="info-card">
-                                <h3><i class="fas fa-chart-bar"></i> Reading Statistics</h3>
-                                <div class="info-row">
-                                    <span class="info-label">Favorite Genre</span>
-                                    <span class="info-value">${currentUser.stats.favoriteGenre}</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Total Reading Time</span>
-                                    <span class="info-value">${currentUser.stats.totalReadingTime}</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Reviews Written</span>
-                                    <span class="info-value">${currentUser.stats.reviewsWritten}</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Books in Library</span>
-                                    <span class="info-value">${currentUser.stats.booksInLibrary}</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Average Rating Given</span>
-                                    <span class="info-value">${currentUser.stats.avgRating} ⭐</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="activity-feed">
-                                <h3><i class="fas fa-clock"></i> Recent Activity</h3>
-                                ${currentUser.recentActivity.map(activity => `
-                                    <div class="activity-item">
-                                        <div class="activity-icon ${activity.type}">
-                                            <i class="fas fa-${activity.type === 'read' ? 'book-open' : 'star'}"></i>
-                                        </div>
-                                        <div class="activity-content">
-                                            <div class="activity-text">${activity.text}</div>
-                                            <div class="activity-time">${activity.time}</div>
-                                        </div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } else if (currentUser.role === 'writer') {
-                actionsContainer.innerHTML = `
-                    <button class="btn-primary" onclick="window.location.href='creator-studio.html?role=writer'">
-                        <i class="fas fa-pen"></i> Creator Studio
-                    </button>
-                    <button class="btn-secondary" onclick="window.location.href='wallet.html'">
-                        <i class="fas fa-wallet"></i> Earnings & Wallet
-                    </button>
-                    <button class="btn-secondary" onclick="window.location.href='library.html'">
-                        <i class="fas fa-book"></i> My Library
-                    </button>
-                `;
-
-                contentContainer.innerHTML = `
-                    <div class="two-column-layout">
-                        <div>
-                            <div class="stats-grid">
-                                <div class="stat-card">
-                                    <div class="stat-icon"><i class="fas fa-book"></i></div>
-                                    <h3>Books Published</h3>
-                                    <div class="stat-value">${currentUser.stats.booksPublished}</div>
-                                </div>
-                                <div class="stat-card">
-                                    <div class="stat-icon"><i class="fas fa-file-alt"></i></div>
-                                    <h3>Total Chapters</h3>
-                                    <div class="stat-value">${currentUser.stats.totalChapters}</div>
-                                </div>
-                                <div class="stat-card">
-                                    <div class="stat-icon"><i class="fas fa-eye"></i></div>
-                                    <h3>Total Views</h3>
-                                    <div class="stat-value">${currentUser.stats.totalViews.toLocaleString()}</div>
-                                </div>
-                                <div class="stat-card">
-                                    <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
-                                    <h3>Total Earnings</h3>
-                                    <div class="stat-value">$${currentUser.stats.totalEarnings.toLocaleString()}</div>
-                                </div>
-                                <div class="stat-card">
-                                    <div class="stat-icon"><i class="fas fa-users"></i></div>
-                                    <h3>Followers</h3>
-                                    <div class="stat-value">${currentUser.stats.followers.toLocaleString()}</div>
-                                </div>
-                                <div class="stat-card">
-                                    <div class="stat-icon"><i class="fas fa-star"></i></div>
-                                    <h3>Average Rating</h3>
-                                    <div class="stat-value">${currentUser.stats.avgRating}</div>
-                                </div>
-                            </div>
-
-                            <div class="info-card">
-                                <h3><i class="fas fa-chart-line"></i> Performance Metrics</h3>
-                                <div class="info-row">
-                                    <span class="info-label">Monthly Views</span>
-                                    <span class="info-value">${currentUser.stats.monthlyViews.toLocaleString()}</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Monthly Earnings</span>
-                                    <span class="info-value">$${currentUser.stats.monthlyEarnings}</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Avg Chapter Views</span>
-                                    <span class="info-value">${currentUser.stats.avgChapterViews.toLocaleString()}</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Total Reviews</span>
-                                    <span class="info-value">${currentUser.stats.totalReviews}</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Reader Completion Rate</span>
-                                    <span class="info-value">${currentUser.stats.completionRate}%</span>
-                                </div>
-                            </div>
-
-                            <div class="info-card">
-                                <h3><i class="fas fa-money-bill-wave"></i> Earnings Breakdown</h3>
-                                <div class="progress-item">
-                                    <div class="progress-header">
-                                        <span class="progress-label">Next Payout</span>
-                                        <span class="progress-value">$${currentUser.stats.nextPayout}</span>
-                                    </div>
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" style="width: ${(currentUser.stats.nextPayout / 1000) * 100}%"></div>
-                                    </div>
-                                    <p style="font-size: 13px; color: #666; margin-top: 8px;">Minimum payout: ৳1000</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="activity-feed">
-                                <h3><i class="fas fa-clock"></i> Recent Activity</h3>
-                                ${currentUser.recentActivity.map(activity => `
-                                    <div class="activity-item">
-                                        <div class="activity-icon ${activity.type}">
-                                            <i class="fas fa-${activity.type === 'write' ? 'pen' : activity.type === 'earn' ? 'dollar-sign' : 'star'}"></i>
-                                        </div>
-                                        <div class="activity-content">
-                                            <div class="activity-text">${activity.text}</div>
-                                            <div class="activity-time">${activity.time}</div>
-                                        </div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } else {
-                actionsContainer.innerHTML = `
-                    <button class="btn-primary" onclick="window.location.href='admin.html'">
-                        <i class="fas fa-shield-alt"></i> Admin Panel
-                    </button>
-                `;
-
-                contentContainer.innerHTML = `
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-icon"><i class="fas fa-users"></i></div>
-                            <h3>Total Users</h3>
-                            <div class="stat-value">${currentUser.stats.totalUsers.toLocaleString()}</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon"><i class="fas fa-book"></i></div>
-                            <h3>Total Books</h3>
-                            <div class="stat-value">${currentUser.stats.totalBooks.toLocaleString()}</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon"><i class="fas fa-pen"></i></div>
-                            <h3>Active Writers</h3>
-                            <div class="stat-value">${currentUser.stats.activeWriters.toLocaleString()}</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon"><i class="fas fa-flag"></i></div>
-                            <h3>Pending Reports</h3>
-                            <div class="stat-value">${currentUser.stats.pendingReports}</div>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-
-        function becomeWriter() {
-            if (confirm('Do you want to become a writer? You will get access to Creator Studio to publish your stories.')) {
-                window.location.href = 'profile.html?role=writer';
-            }
-        }
-
-        // Dropdown menu - handled by main.js
-
-        // Initialize
-        loadProfile();
-    </script>
-
     <!-- Auth Modal -->
     <div id="authModal" class="modal">
         <div class="modal-content">
@@ -838,7 +1183,483 @@
         </div>
     </div>
 
+    <!-- ── Scripts ── -->
     <script src="js/auth.js"></script>
     <script src="js/main.js"></script>
+    <script>
+    // ================================================================
+    //  PROFILE PAGE – JAVASCRIPT
+    // ================================================================
+
+    // ── Default profile data (merged with localStorage) ──
+    const DEFAULT_PROFILE = {
+        firstName:    'Alex',
+        lastName:     'Rahman',
+        username:     'alex_reads',
+        email:        'alex@storyverse.com',
+        phone:        '+880 1712-345678',
+        birthdate:    '1998-05-14',
+        gender:       'male',
+        bio:          'Avid reader and aspiring writer. Love fantasy, sci-fi and romance novels. Always hunting for the next great story!',
+        addressLine1: 'House 12, Road 5, Dhanmondi',
+        addressLine2: '',
+        city:         'Dhaka',
+        district:     'Dhaka',
+        postalCode:   '1209',
+        country:      'BD',
+        role:         'reader',
+        joined:       'May 2026',
+        bkash:        '01712345678',
+        nagad:        '',
+        rocket:       '',
+        defaultPayout:'bkash',
+        stats: {
+            booksRead:     24,
+            chaptersRead:  342,
+            coinsBalance:  850,
+            streak:        15,
+            reviews:       18,
+            totalReadTime: '127h'
+        },
+        activity: [
+            { type:'read',  icon:'book-open',    text:'Finished Chapter 5 of "The Last Kingdom"',     time:'2 hours ago'  },
+            { type:'coin',  icon:'coins',         text:'Unlocked Chapter 12 of "Eternal Flames" — 10 Coins', time:'1 day ago'    },
+            { type:'read',  icon:'star',          text:'Left a 5-star review on "Shadows of Tomorrow"', time:'2 days ago'   },
+            { type:'read',  icon:'heart',         text:'Added "Dragon\'s Legacy" to library',           time:'3 days ago'   },
+            { type:'earn',  icon:'bookmark',      text:'Completed "Whispers in the Dark"',             time:'5 days ago'   },
+            { type:'write', icon:'pen',           text:'Started reading "Digital Dreams"',             time:'1 week ago'   },
+        ]
+    };
+
+    // Load from localStorage or use defaults
+    function loadProfile() {
+        const saved = JSON.parse(localStorage.getItem('sv_profile') || 'null');
+        return Object.assign({}, DEFAULT_PROFILE, saved || {});
+    }
+
+    function saveProfile(data) {
+        localStorage.setItem('sv_profile', JSON.stringify(data));
+    }
+
+    let PROFILE = loadProfile();
+
+    // ── Populate Banner ──
+    function populateBanner() {
+        document.getElementById('bannerName').textContent    = `${PROFILE.firstName} ${PROFILE.lastName}`;
+        document.getElementById('bannerUsername').textContent = `@${PROFILE.username}`;
+        document.getElementById('bannerEmail').textContent   = PROFILE.email;
+        document.getElementById('bannerJoined').textContent  = PROFILE.joined;
+
+        const roleEl = document.getElementById('bannerRole');
+        if (PROFILE.role === 'writer') {
+            roleEl.innerHTML = '<i class="fas fa-pen-fancy"></i> Writer';
+        } else {
+            roleEl.innerHTML = '<i class="fas fa-book-reader"></i> Reader';
+        }
+
+        // Avatar
+        document.getElementById('profileAvatarImg').src =
+            `https://ui-avatars.com/api/?name=${encodeURIComponent(PROFILE.firstName+'+'+PROFILE.lastName)}&background=62ab00&color=fff&size=200`;
+
+        // Nav avatar
+        const navAvatar = document.getElementById('userAvatar');
+        if (navAvatar) navAvatar.src =
+            `https://ui-avatars.com/api/?name=${encodeURIComponent(PROFILE.firstName)}&background=eccd00&color=282828`;
+
+        // Banner stats
+        const s = PROFILE.stats;
+        document.getElementById('bannerStats').innerHTML = `
+            <div class="bstat"><div class="bstat-num">${s.booksRead}</div><div class="bstat-label">Books Read</div></div>
+            <div class="bstat"><div class="bstat-num">${s.chaptersRead}</div><div class="bstat-label">Chapters</div></div>
+            <div class="bstat"><div class="bstat-num">${s.coinsBalance}</div><div class="bstat-label">Coins</div></div>
+            <div class="bstat"><div class="bstat-num">${s.streak} days</div><div class="bstat-label">Streak</div></div>
+        `;
+    }
+
+    // ── Populate Overview Tab ──
+    function populateOverview() {
+        const s = PROFILE.stats;
+        document.getElementById('overviewStats').innerHTML = `
+            <div class="stat-mini-card"><div class="smc-icon"><i class="fas fa-book"></i></div><div class="smc-val">${s.booksRead}</div><div class="smc-label">Books Read</div></div>
+            <div class="stat-mini-card"><div class="smc-icon"><i class="fas fa-bookmark"></i></div><div class="smc-val">${s.chaptersRead}</div><div class="smc-label">Chapters Read</div></div>
+            <div class="stat-mini-card"><div class="smc-icon"><i class="fas fa-coins"></i></div><div class="smc-val">${s.coinsBalance}</div><div class="smc-label">Coin Balance</div></div>
+            <div class="stat-mini-card"><div class="smc-icon"><i class="fas fa-fire"></i></div><div class="smc-val">${s.streak}</div><div class="smc-label">Day Streak</div></div>
+            <div class="stat-mini-card"><div class="smc-icon"><i class="fas fa-star"></i></div><div class="smc-val">${s.reviews}</div><div class="smc-label">Reviews</div></div>
+            <div class="stat-mini-card"><div class="smc-icon"><i class="fas fa-clock"></i></div><div class="smc-val">${s.totalReadTime}</div><div class="smc-label">Total Read</div></div>
+        `;
+
+        document.getElementById('overviewDetails').innerHTML = `
+            <div>
+                <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:4px;">Full Name</div>
+                <div style="font-size:15px;font-weight:600;color:var(--text);">${PROFILE.firstName} ${PROFILE.lastName}</div>
+            </div>
+            <div>
+                <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:4px;">Username</div>
+                <div style="font-size:15px;font-weight:600;color:var(--text);">@${PROFILE.username}</div>
+            </div>
+            <div>
+                <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:4px;">Email</div>
+                <div style="font-size:15px;font-weight:600;color:var(--text);">${PROFILE.email}</div>
+            </div>
+            <div>
+                <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:4px;">Phone</div>
+                <div style="font-size:15px;font-weight:600;color:var(--text);">${PROFILE.phone || '—'}</div>
+            </div>
+            <div>
+                <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:4px;">Date of Birth</div>
+                <div style="font-size:15px;font-weight:600;color:var(--text);">${PROFILE.birthdate ? new Date(PROFILE.birthdate).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) : '—'}</div>
+            </div>
+            <div>
+                <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:4px;">City</div>
+                <div style="font-size:15px;font-weight:600;color:var(--text);">${PROFILE.city || '—'}, ${PROFILE.country || ''}</div>
+            </div>
+            <div style="grid-column:span 2;">
+                <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:6px;">Bio</div>
+                <div style="font-size:14px;color:#555;line-height:1.7;background:var(--bg2);padding:14px;border-radius:8px;border-left:3px solid var(--green);">${PROFILE.bio || 'No bio added yet.'}</div>
+            </div>
+        `;
+
+        // Activity
+        renderActivity('overviewActivity', PROFILE.activity.slice(0, 4));
+        renderActivity('fullActivityList', PROFILE.activity);
+    }
+
+    function renderActivity(containerId, items) {
+        const typeClass = { read:'ad-read', write:'ad-write', earn:'ad-earn', coin:'ad-coin' };
+        document.getElementById(containerId).innerHTML = items.map(a => `
+            <div class="activity-row">
+                <div class="activity-dot ${typeClass[a.type] || 'ad-read'}">
+                    <i class="fas fa-${a.icon}"></i>
+                </div>
+                <div class="activity-text">
+                    <div class="activity-title">${a.text}</div>
+                    <div class="activity-time">${a.time}</div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // ── Populate Edit Profile Form ──
+    function populateForm() {
+        document.getElementById('firstName').value    = PROFILE.firstName    || '';
+        document.getElementById('lastName').value     = PROFILE.lastName     || '';
+        document.getElementById('username').value     = PROFILE.username     || '';
+        document.getElementById('email').value        = PROFILE.email        || '';
+        document.getElementById('phone').value        = PROFILE.phone        || '';
+        document.getElementById('birthdate').value    = PROFILE.birthdate    || '';
+        document.getElementById('bio').value          = PROFILE.bio          || '';
+        document.getElementById('addressLine1').value = PROFILE.addressLine1 || '';
+        document.getElementById('addressLine2').value = PROFILE.addressLine2 || '';
+        document.getElementById('city').value         = PROFILE.city         || '';
+        document.getElementById('district').value     = PROFILE.district     || '';
+        document.getElementById('postalCode').value   = PROFILE.postalCode   || '';
+        document.getElementById('country').value      = PROFILE.country      || 'BD';
+
+        const gInput = document.querySelector(`input[name="gender"][value="${PROFILE.gender}"]`);
+        if (gInput) gInput.checked = true;
+
+        updateBioCount();
+
+        // Mobile banking
+        document.getElementById('bkashNum').value        = PROFILE.bkash         || '';
+        document.getElementById('nagadNum').value         = PROFILE.nagad         || '';
+        document.getElementById('rocketNum').value        = PROFILE.rocket        || '';
+        document.getElementById('defaultPayout').value   = PROFILE.defaultPayout || 'bkash';
+    }
+
+    // ── Bio character counter ──
+    document.getElementById('bio').addEventListener('input', updateBioCount);
+    function updateBioCount() {
+        const len = document.getElementById('bio').value.length;
+        document.getElementById('bioCount').textContent = `${len} / 300 characters`;
+        if (len > 300) {
+            document.getElementById('bio').value = document.getElementById('bio').value.slice(0, 300);
+        }
+    }
+
+    // ── Username validation ──
+    function checkUsername(input) {
+        const val = input.value;
+        const hint = document.getElementById('usernameHint');
+        if (/^[a-zA-Z0-9_]*$/.test(val)) {
+            hint.textContent = val.length >= 3 ? `✓ @${val} looks good!` : 'At least 3 characters required.';
+            hint.style.color = val.length >= 3 ? 'var(--green)' : 'var(--muted)';
+            input.style.borderColor = val.length >= 3 ? 'var(--green)' : '';
+        } else {
+            hint.textContent = 'Only letters, numbers, and underscores allowed.';
+            hint.style.color = 'var(--red)';
+            input.style.borderColor = 'var(--red)';
+        }
+    }
+
+    // ── Save personal info ──
+    function savePersonalInfo() {
+        PROFILE.firstName = document.getElementById('firstName').value.trim();
+        PROFILE.lastName  = document.getElementById('lastName').value.trim();
+        PROFILE.username  = document.getElementById('username').value.trim();
+        PROFILE.email     = document.getElementById('email').value.trim();
+        PROFILE.phone     = document.getElementById('phone').value.trim();
+        PROFILE.birthdate = document.getElementById('birthdate').value;
+        PROFILE.bio       = document.getElementById('bio').value.trim();
+        const g = document.querySelector('input[name="gender"]:checked');
+        PROFILE.gender    = g ? g.value : 'prefer_not';
+
+        saveProfile(PROFILE);
+        populateBanner();
+        showToast('personalToast');
+    }
+
+    function resetPersonalInfo() { populateForm(); }
+
+    // ── Save address ──
+    function saveAddress() {
+        PROFILE.addressLine1 = document.getElementById('addressLine1').value.trim();
+        PROFILE.addressLine2 = document.getElementById('addressLine2').value.trim();
+        PROFILE.city         = document.getElementById('city').value.trim();
+        PROFILE.district     = document.getElementById('district').value.trim();
+        PROFILE.postalCode   = document.getElementById('postalCode').value.trim();
+        PROFILE.country      = document.getElementById('country').value;
+        saveProfile(PROFILE);
+        showToast('addressToast');
+    }
+
+    // ── Password ──
+    function togglePw(id, btn) {
+        const inp = document.getElementById(id);
+        const isText = inp.type === 'text';
+        inp.type = isText ? 'password' : 'text';
+        btn.querySelector('i').className = `fas fa-eye${isText ? '' : '-slash'}`;
+    }
+
+    function checkStrength(pw) {
+        const fill  = document.getElementById('pwFill');
+        const label = document.getElementById('pwStrengthLabel');
+        let score = 0;
+        if (pw.length >= 8) score++;
+        if (/[A-Z]/.test(pw))  score++;
+        if (/[0-9]/.test(pw))  score++;
+        if (/[^A-Za-z0-9]/.test(pw)) score++;
+
+        const levels = [
+            { w:'0%',   color:'#ccc',        text:'' },
+            { w:'25%',  color:'var(--red)',   text:'Weak' },
+            { w:'50%',  color:'orange',       text:'Fair' },
+            { w:'75%',  color:'var(--gold)',  text:'Good' },
+            { w:'100%', color:'var(--green)', text:'Strong 💪' },
+        ];
+        const lvl = levels[score];
+        fill.style.width  = lvl.w;
+        fill.style.background = lvl.color;
+        label.textContent = lvl.text;
+        label.style.color = lvl.color;
+    }
+
+    function checkMatch() {
+        const np = document.getElementById('newPw').value;
+        const cp = document.getElementById('confirmPw').value;
+        const hint = document.getElementById('pwMatchHint');
+        if (!cp) { hint.textContent = ''; return; }
+        if (np === cp) {
+            hint.textContent = '✓ Passwords match';
+            hint.style.color = 'var(--green)';
+        } else {
+            hint.textContent = '✗ Passwords do not match';
+            hint.style.color = 'var(--red)';
+        }
+    }
+
+    function changePassword() {
+        const cur = document.getElementById('currentPw').value;
+        const np  = document.getElementById('newPw').value;
+        const cp  = document.getElementById('confirmPw').value;
+        if (!cur) { alert('Please enter your current password.'); return; }
+        if (np.length < 8) { alert('New password must be at least 8 characters.'); return; }
+        if (np !== cp) { alert('New passwords do not match.'); return; }
+        // Simulate save
+        document.getElementById('currentPw').value = '';
+        document.getElementById('newPw').value = '';
+        document.getElementById('confirmPw').value = '';
+        document.getElementById('pwFill').style.width = '0';
+        document.getElementById('pwStrengthLabel').textContent = '';
+        document.getElementById('pwMatchHint').textContent = '';
+        showToast('pwToast');
+    }
+
+    function revokeSession(btn) {
+        btn.closest('.activity-row').style.opacity = '0';
+        setTimeout(() => btn.closest('.activity-row').remove(), 300);
+    }
+
+    function revokeAll() {
+        if (confirm('Sign out all other devices?')) {
+            alert('All other sessions have been terminated.');
+        }
+    }
+
+    // ── Card preview & formatting ──
+    function formatCardNum(input) {
+        let v = input.value.replace(/\D/g,'').substring(0,16);
+        v = v.replace(/(.{4})/g,'$1 ').trim();
+        input.value = v;
+        updateCardPreview();
+
+        const raw = input.value.replace(/\s/g,'');
+        const icon = document.getElementById('cardBrandIcon');
+        if (/^4/.test(raw))        { icon.className = 'fab fa-cc-visa card-brand-icon'; icon.style.color='#1976d2'; }
+        else if (/^5[1-5]/.test(raw)) { icon.className = 'fab fa-cc-mastercard card-brand-icon'; icon.style.color='#e64a19'; }
+        else if (/^3[47]/.test(raw))  { icon.className = 'fab fa-cc-amex card-brand-icon'; icon.style.color='#00a651'; }
+        else { icon.className = 'fas fa-credit-card card-brand-icon'; icon.style.color='var(--muted)'; }
+
+        updateCardNetworkIcon(raw);
+    }
+
+    function updateCardNetworkIcon(raw) {
+        const ni = document.getElementById('cardNetworkIcon');
+        if (!raw) raw = '';
+        if (/^4/.test(raw))           ni.innerHTML = '<i class="fab fa-cc-visa"></i>';
+        else if (/^5[1-5]/.test(raw)) ni.innerHTML = '<i class="fab fa-cc-mastercard"></i>';
+        else if (/^3[47]/.test(raw))  ni.innerHTML = '<i class="fab fa-cc-amex"></i>';
+        else                          ni.innerHTML = '<i class="fas fa-credit-card"></i>';
+    }
+
+    function formatExpiry(input) {
+        let v = input.value.replace(/\D/g,'').substring(0,4);
+        if (v.length >= 3) v = v.slice(0,2) + ' / ' + v.slice(2);
+        input.value = v;
+        updateCardPreview();
+    }
+
+    function updateCardPreview() {
+        const num  = document.getElementById('cardNumber')?.value  || '';
+        const name = document.getElementById('cardHolder')?.value  || '';
+        const exp  = document.getElementById('cardExpiry')?.value  || '';
+
+        const display = num.replace(/\d/g, '•').padEnd(19,'•').replace(/(....)/g,'$1 ').trim() || '•••• •••• •••• ••••';
+        document.getElementById('cardPreviewNum').textContent  = num  || '•••• •••• •••• ••••';
+        document.getElementById('cardPreviewName').textContent = name.toUpperCase() || 'YOUR NAME';
+        document.getElementById('cardPreviewExp').textContent  = exp  || 'MM / YY';
+    }
+
+    function toggleAddCard() {
+        const form = document.getElementById('addCardForm');
+        form.classList.toggle('open');
+        const btn  = document.getElementById('addCardToggle');
+        btn.innerHTML = form.classList.contains('open')
+            ? '<i class="fas fa-minus-circle"></i> Cancel'
+            : '<i class="fas fa-plus-circle"></i> Add New Card';
+    }
+
+    function saveCard() {
+        const num  = document.getElementById('cardNumber').value.replace(/\s/g,'');
+        const name = document.getElementById('cardHolder').value.trim();
+        const exp  = document.getElementById('cardExpiry').value.trim();
+        const cvv  = document.getElementById('cardCvv').value.trim();
+
+        if (num.length < 16) { alert('Please enter a valid 16-digit card number.'); return; }
+        if (!name)           { alert('Please enter the cardholder name.'); return; }
+        if (!exp)            { alert('Please enter the expiry date.'); return; }
+        if (!cvv)            { alert('Please enter the CVV.'); return; }
+
+        // Detect brand
+        let brand = 'fas fa-credit-card', cls = 'ci-amex', brandName = 'Card';
+        if (/^4/.test(num))           { brand = 'fab fa-cc-visa';       cls = 'ci-visa'; brandName='Visa'; }
+        else if (/^5[1-5]/.test(num)) { brand = 'fab fa-cc-mastercard'; cls = 'ci-mc';   brandName='Mastercard'; }
+
+        const last4 = num.slice(-4);
+        const newId = Date.now();
+
+        const item = document.createElement('div');
+        item.className = 'saved-card-item';
+        item.dataset.id = newId;
+        item.innerHTML = `
+            <div class="card-icon-circle ${cls}"><i class="${brand}"></i></div>
+            <div class="card-item-info">
+                <div class="card-item-name">${brandName} •••• ${last4}</div>
+                <div class="card-item-sub">Expires ${exp} &bull; ${name}</div>
+            </div>
+            <button class="card-remove-btn" onclick="removeCard(this,'${newId}')" title="Remove"><i class="fas fa-trash-alt"></i></button>
+        `;
+
+        document.getElementById('savedCardsList').appendChild(item);
+
+        // Reset form
+        ['cardNumber','cardHolder','cardExpiry','cardCvv'].forEach(id => document.getElementById(id).value = '');
+        updateCardPreview();
+        toggleAddCard();
+        showToast('cardToast');
+    }
+
+    function removeCard(btn, id) {
+        if (!confirm('Remove this card?')) return;
+        const item = btn.closest('.saved-card-item');
+        item.style.opacity = '0';
+        setTimeout(() => item.remove(), 300);
+    }
+
+    function saveMobileBanking() {
+        PROFILE.bkash         = document.getElementById('bkashNum').value.trim();
+        PROFILE.nagad         = document.getElementById('nagadNum').value.trim();
+        PROFILE.rocket        = document.getElementById('rocketNum').value.trim();
+        PROFILE.defaultPayout = document.getElementById('defaultPayout').value;
+        saveProfile(PROFILE);
+        showToast('mobileToast');
+    }
+
+    // ── Danger zone ──
+    function deactivateAccount() {
+        if (confirm('Deactivate your account? You can reactivate by logging back in.')) {
+            alert('Account deactivated. You will now be logged out.');
+            auth.logout();
+        }
+    }
+
+    function confirmDelete() {
+        const answer = prompt('Type DELETE to confirm permanent account deletion:');
+        if (answer === 'DELETE') {
+            alert('Your account has been permanently deleted. Goodbye! 😢');
+            auth.logout();
+        } else {
+            alert('Account deletion cancelled.');
+        }
+    }
+
+    // ── Tab navigation ──
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.panel-section').forEach(s => s.classList.remove('active'));
+            btn.classList.add('active');
+            const target = document.getElementById('tab-' + btn.dataset.tab);
+            if (target) { target.classList.add('active'); }
+        });
+    });
+
+    // ── Avatar upload preview ──
+    document.getElementById('avatarFileInput').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = ev => {
+            const src = ev.target.result;
+            document.getElementById('profileAvatarImg').src = src;
+            const nav = document.getElementById('userAvatar');
+            if (nav) nav.src = src;
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // ── Toast helper ──
+    function showToast(id) {
+        const el = document.getElementById(id);
+        el.classList.add('show');
+        setTimeout(() => el.classList.remove('show'), 3000);
+    }
+
+    // ── Init ──
+    populateBanner();
+    populateOverview();
+    populateForm();
+    </script>
 </body>
+
 </html>

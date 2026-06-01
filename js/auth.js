@@ -104,8 +104,8 @@ class AuthSystem {
             localStorage.setItem('users', JSON.stringify(users));
         }
 
-        alert('Congratulations! You are now a writer. Access Creator Studio from your profile menu.');
-        window.location.reload();
+        alert('🎉 Congratulations! You are now a writer. Welcome to your Creator Studio!');
+        window.location.href = 'creator-studio.html';
     }
 }
 
